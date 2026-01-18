@@ -1,39 +1,16 @@
 <script lang="ts">
+	import PresetForm from './components/PresetForm.svelte'
 	import WaterGoalDisplay from './components/WaterGoalDisplay.svelte'
+	import type { Preset } from './interfaces/Preset'
 	import { convertToLiters } from './utils/convertToLiters'
-
-	interface Preset {
-		name: string
-		value: number
-	}
 
 	let waterTotal = $state(0)
 	let waterToAdd = $state(0)
 	let presets: Preset[] = $state([])
 
-	let presetName = $state('')
-	let isAddingPreset = $state(false)
-
 	const addWater = (value: number): void => {
 		if (!Number.isNaN(value) && value >= 0) {
 			waterTotal = +(waterTotal + convertToLiters(value)).toFixed(3)
-		}
-	}
-
-	const addPreset = (): void => {
-		if (!Number.isNaN(waterToAdd) && waterToAdd > 0) {
-			presets = [...presets, { name: presetName, value: waterToAdd }]
-		}
-
-		presetName = ''
-		isAddingPreset = false
-	}
-
-	const handleKeydown = (e: KeyboardEvent): void => {
-		if (e.key === 'Enter') {
-			addPreset()
-		} else if (e.key === 'Escape') {
-			isAddingPreset = false
 		}
 	}
 </script>
@@ -70,29 +47,7 @@
 
 	<div class="flex gap-2">
 		<button class="cursor-pointer" onclick={() => addWater(waterToAdd)}>Add water</button>
-		<button class="cursor-pointer" onclick={() => (isAddingPreset = true)}>Add as preset</button
-		>
+
+		<PresetForm bind:presets {waterToAdd} />
 	</div>
-
-	{#if isAddingPreset}
-		<div class="absolute bg-white self-center">
-			<button
-				class="absolute right-1 top-1 cursor-pointer"
-				onclick={() => (isAddingPreset = false)}>x</button
-			>
-
-			<div class="flex flex-col gap-2">
-				<label for="preset-add">Preset name:</label>
-				<input
-					type="text"
-					id="preset-add"
-					class="w-32"
-					bind:value={presetName}
-					onkeydown={handleKeydown}
-				/>
-			</div>
-
-			<button onclick={addPreset}>Add preset</button>
-		</div>
-	{/if}
 </div>
