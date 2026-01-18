@@ -28,13 +28,14 @@
 </script>
 
 {#if isEditing}
-	<div class="flex gap-2">
-		<label for="water-goal">New goal (in mL):</label>
+	<div class="flex gap-2 items-center">
+		<label for="water-goal">(in mL):</label>
 		<input
 			type="number"
 			min="0"
 			step="100"
 			id="water-goal"
+			class="w-20 border-3 rounded-[2px] px-1"
 			bind:value={tempGoal}
 			onkeydown={handleKeydown}
 		/>

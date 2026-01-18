@@ -1,1 +1,11 @@
+@import url('https://fonts.googleapis.com/css2?family=Silkscreen&display=swap');
 @import 'tailwindcss';
+
+@theme {
+	--color-darkblue: #1b7fde;
+	--color-lightblue: #bde0fe;
+	--color-close: #ffb3d0;
+	--color-minimize: #ffe59d;
+
+	--font-silkscreen: 'Silkscreen', sans-serif;
+}

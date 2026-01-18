@@ -1,4 +1,6 @@
 <script lang="ts">
+	import Button from './components/Button.svelte'
+	import Header from './components/Header.svelte'
 	import PresetForm from './components/PresetForm.svelte'
 	import UnitSelect from './components/UnitSelect.svelte'
 	import WaterDisplay from './components/WaterDisplay.svelte'
@@ -20,43 +22,62 @@
 	}
 </script>
 
-<div class="relative h-dvh flex flex-col items-center justify-center">
-	<h1>Hydration Tracker</h1>
-	<span>
-		<WaterDisplay {unit} water={waterTotal} /> / <WaterGoalDisplay bind:waterGoal {unit} />
-	</span>
+<div
+	class="bg-lightblue flex flex-col gap-1 p-2 font-silkscreen border-3 border-darkblue rounded-lg text-darkblue overflow-x-hidden"
+>
+	<Header />
 
-	<h2>Presets</h2>
-	<div class="flex gap-2">
-		{#if presets.length > 0}
-			{#each presets as preset (preset.name)}
-				<button class="cursor-pointer" onclick={() => addWater(preset.value)}
-					>{preset.name}</button
-				>
-			{/each}
-		{:else}
-			<p>No presets found.</p>
-		{/if}
+	<div
+		class="relative bg-white flex flex-col items-center justify-center gap-4 py-6 border-3 border-darkblue rounded-b-lg"
+	>
+		<div class="text-center">
+			<h2 class="font-bold">My goal</h2>
+			<span class="flex items-center">
+				<WaterDisplay {unit} water={waterTotal} /> /&nbsp;<WaterGoalDisplay
+					bind:waterGoal
+					{unit}
+				/>
+			</span>
+		</div>
+
+		<div class="flex flex-col items-center">
+			<h2 class="font-bold">Presets</h2>
+			<div class="flex justify-center flex-wrap gap-2">
+				{#if presets.length > 0}
+					{#each presets as preset (preset.name)}
+						<Button action={() => addWater(preset.value)} text={preset.name} />
+					{/each}
+				{:else}
+					<p>No presets found.</p>
+				{/if}
+			</div>
+		</div>
+
+		<div class="text-center">
+			<h2 class="font-bold">Add water</h2>
+
+			<div class="flex flex-col gap-1 items-center">
+				<div class="flex gap-2 items-center">
+					<label for="water-add">(in mL):</label>
+					<input
+						type="number"
+						min="0"
+						step="100"
+						id="water-add"
+						class="w-20 border-3 rounded-[2px] px-1"
+						bind:value={waterToAdd}
+						onkeydown={(e) => e.code === 'Enter' && addWater(waterToAdd)}
+					/>
+				</div>
+
+				<div class="flex gap-2">
+					<Button action={() => addWater(waterToAdd)} text="Drink" />
+
+					<PresetForm bind:presets {waterToAdd} />
+				</div>
+			</div>
+		</div>
+
+		<UnitSelect bind:unit />
 	</div>
-
-	<div class="flex gap-2">
-		<label for="water-add">Water to add (in mL):</label>
-		<input
-			type="number"
-			min="0"
-			step="100"
-			id="water-add"
-			class="w-32"
-			bind:value={waterToAdd}
-			onkeydown={(e) => e.code === 'Enter' && addWater(waterToAdd)}
-		/>
-	</div>
-
-	<div class="flex gap-2">
-		<button class="cursor-pointer" onclick={() => addWater(waterToAdd)}>Add water</button>
-
-		<PresetForm bind:presets {waterToAdd} />
-	</div>
-
-	<UnitSelect bind:unit />
 </div>

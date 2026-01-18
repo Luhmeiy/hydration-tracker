@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { Preset } from '../interfaces/Preset'
+	import Button from './Button.svelte'
 
 	let { presets = $bindable(), waterToAdd }: { presets: Preset[]; waterToAdd: number } = $props()
 
@@ -63,28 +64,35 @@
 </script>
 
 <div class="flex flex-col">
-	<button class="cursor-pointer" onclick={startAdding}>Add as preset</button>
+	<Button action={startAdding} text="Create preset" />
 
 	{#if presetError}
-		<p>{presetError}</p>
+		<p class="text-close">{presetError}</p>
 	{/if}
 </div>
 
 {#if isAddingPreset}
-	<div class="absolute bg-white left-1/2 top-1/2 -translate-1/2">
-		<button class="absolute right-1 top-1 cursor-pointer" onclick={cleanPreset}>x</button>
+	<div
+		class="absolute bg-white left-1/2 top-1/2 -translate-1/2 flex flex-col gap-2 items-center border-3 border-darkblue px-4 py-2"
+	>
+		<button
+			class="absolute right-2 top-1 font-bold text-close cursor-pointer"
+			onclick={cleanPreset}
+		>
+			x
+		</button>
 
 		<div class="flex flex-col gap-2">
 			<label for="preset-add">Preset name:</label>
 			<input
 				type="text"
 				id="preset-add"
-				class="w-32"
+				class="w-auto border-3 rounded-[2px] px-1"
 				bind:value={presetName}
 				onkeydown={handleKeydown}
 			/>
 		</div>
 
-		<button class="cursor-pointer" onclick={addPreset}>Add preset</button>
+		<Button action={addPreset} text="Add preset" />
 	</div>
 {/if}
