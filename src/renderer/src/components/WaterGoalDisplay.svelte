@@ -1,20 +1,20 @@
 <script lang="ts">
-	import { convertToLiters } from '../utils/convertToLiters'
+	import type { Unit } from '../interfaces/Unit'
+	import WaterDisplay from './WaterDisplay.svelte'
 
-	let goal = $state(2.5)
-	let tempGoal = $state(2500)
+	let { waterGoal = $bindable(), unit }: { waterGoal: number; unit: Unit } = $props()
+	let tempGoal = $state(0)
 	let isEditing = $state(false)
 
 	const startEditing = (): void => {
-		tempGoal = goal * 1000
+		tempGoal = waterGoal
 		isEditing = true
 	}
 
 	const saveGoal = (): void => {
-		if (!Number.isNaN(tempGoal) && tempGoal >= 0) {
-			goal = convertToLiters(tempGoal)
-		}
+		if (Number.isNaN(tempGoal) || tempGoal <= 0) return
 
+		waterGoal = tempGoal
 		isEditing = false
 	}
 
@@ -41,6 +41,6 @@
 	</div>
 {:else}
 	<button onclick={startEditing}>
-		{goal}L
+		<WaterDisplay {unit} water={waterGoal} />
 	</button>
 {/if}

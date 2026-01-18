@@ -1,23 +1,30 @@
 <script lang="ts">
 	import PresetForm from './components/PresetForm.svelte'
+	import UnitSelect from './components/UnitSelect.svelte'
+	import WaterDisplay from './components/WaterDisplay.svelte'
 	import WaterGoalDisplay from './components/WaterGoalDisplay.svelte'
 	import type { Preset } from './interfaces/Preset'
-	import { convertToLiters } from './utils/convertToLiters'
+	import type { Unit } from './interfaces/Unit'
 
-	let waterTotal = $state(0)
-	let waterToAdd = $state(0)
+	let unit: Unit = $state('L')
 	let presets: Preset[] = $state([])
 
+	let waterGoal = $state(2500)
+	let waterTotal = $state(0)
+	let waterToAdd = $state(0)
+
 	const addWater = (value: number): void => {
-		if (!Number.isNaN(value) && value >= 0) {
-			waterTotal = +(waterTotal + convertToLiters(value)).toFixed(3)
-		}
+		if (Number.isNaN(value) || value <= 0) return
+
+		waterTotal += value
 	}
 </script>
 
 <div class="relative h-dvh flex flex-col items-center justify-center">
 	<h1>Hydration Tracker</h1>
-	<span>{waterTotal}L / <WaterGoalDisplay /></span>
+	<span>
+		<WaterDisplay {unit} water={waterTotal} /> / <WaterGoalDisplay bind:waterGoal {unit} />
+	</span>
 
 	<h2>Presets</h2>
 	<div class="flex gap-2">
@@ -33,7 +40,7 @@
 	</div>
 
 	<div class="flex gap-2">
-		<label for="water-add">Water to add:</label>
+		<label for="water-add">Water to add (in mL):</label>
 		<input
 			type="number"
 			min="0"
@@ -50,4 +57,6 @@
 
 		<PresetForm bind:presets {waterToAdd} />
 	</div>
+
+	<UnitSelect bind:unit />
 </div>
