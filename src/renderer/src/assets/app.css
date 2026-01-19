@@ -1,6 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Silkscreen&display=swap');
 @import 'tailwindcss';
 
+@custom-variant dark (&:where(.dark, .dark *));
+@custom-variant darker (&:where(.darker, .darker *));
+
 @theme {
 	--color-darkblue: #1b7fde;
 	--color-lightblue: #bde0fe;
@@ -8,4 +11,21 @@
 	--color-minimize: #ffe59d;
 
 	--font-silkscreen: 'Silkscreen', sans-serif;
+}
+
+:root,
+:host {
+	@variant dark {
+		--color-darkblue: #4d9eff;
+		--color-lightblue: #1e3855;
+		--color-close: #ff4081;
+		--color-minimize: #ffb74d;
+	}
+
+	@variant darker {
+		--color-darkblue: #0073ff;
+		--color-lightblue: #192f48;
+		--color-close: #ff4081;
+		--color-minimize: #ffb74d;
+	}
 }

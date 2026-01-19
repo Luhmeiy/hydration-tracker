@@ -3,6 +3,7 @@
 	import Button from './components/Button.svelte'
 	import Header from './components/Header.svelte'
 	import PresetForm from './components/PresetForm.svelte'
+	import ToggleMode from './components/ToggleMode.svelte'
 	import UnitSelect from './components/UnitSelect.svelte'
 	import WaterDisplay from './components/WaterDisplay.svelte'
 	import WaterGoalDisplay from './components/WaterGoalDisplay.svelte'
@@ -39,13 +40,15 @@
 </script>
 
 <div
-	class="bg-lightblue flex flex-col gap-1 p-2 font-silkscreen border-3 border-darkblue rounded-lg text-darkblue overflow-x-hidden"
+	class="bg-lightblue flex flex-col gap-1 p-2 font-silkscreen border-3 border-darkblue rounded-lg text-darkblue overflow-x-hidden transition-colors duration-500 **:transition-colors **:duration-500 grey:bg-red-500"
 >
 	<Header />
 
 	<div
-		class="relative bg-white flex flex-col items-center justify-center gap-4 py-6 border-3 border-darkblue rounded-b-lg"
+		class="relative bg-white flex flex-col items-center justify-center gap-4 py-6 border-3 border-darkblue rounded-b-lg dark:bg-zinc-800 darker:bg-zinc-950"
 	>
+		<ToggleMode />
+
 		<div class="text-center">
 			<h2 class="font-bold">My goal</h2>
 			<span class="flex items-center">

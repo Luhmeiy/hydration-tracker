@@ -6,7 +6,7 @@
 </script>
 
 <div class="flex">
-	<h1 style="-webkit-app-region: drag" class="text-xl flex-1">Hydration Tracker</h1>
+	<h1 style="-webkit-app-region: drag" class="text-xl flex-1 select-none">Hydration Tracker</h1>
 
 	<div class="flex gap-2 items-center">
 		<HeaderButton action={minimizeWindow} bgColor="bg-minimize" />
