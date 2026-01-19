@@ -13,6 +13,7 @@
 	const conf = new Conf()
 
 	let unit: Unit = $state('L')
+	let date = $state(new Date())
 	let presets: Preset[] = $state([])
 
 	let waterGoal = $state(2500)
@@ -30,9 +31,18 @@
 	$effect(() => {
 		const getData = async (): Promise<void> => {
 			unit = ((await conf.get('unit')) as Unit) || 'L'
+			date = new Date((await conf.get('date')) as string)
 			presets = JSON.parse((await conf.get('presets')) as string) || []
-			waterTotal = ((await conf.get('waterTotal')) as number) || 0
 			waterGoal = ((await conf.get('waterGoal')) as number) || 2500
+
+			const today = new Date()
+
+			if (date.toDateString() === today.toDateString()) {
+				waterTotal = ((await conf.get('waterTotal')) as number) || 0
+			} else {
+				await conf.set('waterTotal', 0)
+				await conf.set('date', today)
+			}
 		}
 
 		getData()
