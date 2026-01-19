@@ -1,7 +1,12 @@
 import { app, shell, BrowserWindow, ipcMain } from 'electron'
+import { Conf, useConf } from 'electron-conf/main'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
+
+const conf = new Conf()
+
+conf.registerRendererListener()
 
 function createWindow(): void {
 	// Create the browser window.
@@ -56,6 +61,8 @@ function createWindow(): void {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
+	useConf()
+
 	// Set app user model id for windows
 	electronApp.setAppUserModelId('com.electron')
 

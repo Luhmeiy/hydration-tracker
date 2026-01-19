@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { Conf } from 'electron-conf/renderer'
 	import Button from './components/Button.svelte'
 	import Header from './components/Header.svelte'
 	import PresetForm from './components/PresetForm.svelte'
@@ -8,6 +9,8 @@
 	import type { Preset } from './interfaces/Preset'
 	import type { Unit } from './interfaces/Unit'
 
+	const conf = new Conf()
+
 	let unit: Unit = $state('L')
 	let presets: Preset[] = $state([])
 
@@ -15,11 +18,24 @@
 	let waterTotal = $state(0)
 	let waterToAdd = $state(0)
 
-	const addWater = (value: number): void => {
+	const addWater = async (value: number): Promise<void> => {
 		if (Number.isNaN(value) || value <= 0) return
 
 		waterTotal += value
+
+		await conf.set('waterTotal', waterTotal)
 	}
+
+	$effect(() => {
+		const getData = async (): Promise<void> => {
+			unit = ((await conf.get('unit')) as Unit) || 'L'
+			presets = JSON.parse((await conf.get('presets')) as string) || []
+			waterTotal = ((await conf.get('waterTotal')) as number) || 0
+			waterGoal = ((await conf.get('waterGoal')) as number) || 2500
+		}
+
+		getData()
+	})
 </script>
 
 <div

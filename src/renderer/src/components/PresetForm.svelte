@@ -1,6 +1,9 @@
 <script lang="ts">
+	import { Conf } from 'electron-conf/renderer'
 	import type { Preset } from '../interfaces/Preset'
 	import Button from './Button.svelte'
+
+	const conf = new Conf()
 
 	let { presets = $bindable(), waterToAdd }: { presets: Preset[]; waterToAdd: number } = $props()
 
@@ -38,7 +41,7 @@
 		return null
 	}
 
-	const addPreset = (): void => {
+	const addPreset = async (): Promise<void> => {
 		presetError = validatePreset()
 
 		if (presetError) {
@@ -50,6 +53,8 @@
 		}
 
 		presets = [...presets, { name: presetName.trim(), value: waterToAdd }]
+
+		await conf.set('presets', JSON.stringify(presets))
 
 		cleanPreset()
 	}

@@ -1,6 +1,9 @@
 <script lang="ts">
+	import { Conf } from 'electron-conf/renderer'
 	import type { Unit } from '../interfaces/Unit'
 	import WaterDisplay from './WaterDisplay.svelte'
+
+	const conf = new Conf()
 
 	let { waterGoal = $bindable(), unit }: { waterGoal: number; unit: Unit } = $props()
 	let tempGoal = $state(0)
@@ -11,11 +14,13 @@
 		isEditing = true
 	}
 
-	const saveGoal = (): void => {
+	const saveGoal = async (): Promise<void> => {
 		if (Number.isNaN(tempGoal) || tempGoal <= 0) return
 
 		waterGoal = tempGoal
 		isEditing = false
+
+		await conf.set('waterGoal', waterGoal)
 	}
 
 	const handleKeydown = (e: KeyboardEvent): void => {
