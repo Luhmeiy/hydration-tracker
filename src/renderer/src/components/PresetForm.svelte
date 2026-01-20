@@ -2,6 +2,7 @@
 	import { Conf } from 'electron-conf/renderer'
 	import type { Preset } from '../interfaces/Preset'
 	import Button from './Button.svelte'
+	import Modal from './Modal.svelte'
 
 	const conf = new Conf()
 
@@ -77,16 +78,7 @@
 </div>
 
 {#if isAddingPreset}
-	<div
-		class="absolute bg-white left-1/2 top-1/2 -translate-1/2 flex flex-col gap-2 items-center border-3 border-darkblue px-4 py-2 dark:bg-zinc-800 darker:bg-zinc-950"
-	>
-		<button
-			class="absolute right-2 top-1 font-bold text-close cursor-pointer"
-			onclick={cleanPreset}
-		>
-			x
-		</button>
-
+	<Modal close={cleanPreset}>
 		<div class="flex flex-col gap-2">
 			<label for="preset-add">Preset name:</label>
 			<input
@@ -99,5 +91,5 @@
 		</div>
 
 		<Button action={addPreset} text="Add preset" />
-	</div>
+	</Modal>
 {/if}

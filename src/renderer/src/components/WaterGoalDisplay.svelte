@@ -5,7 +5,18 @@
 
 	const conf = new Conf()
 
-	let { waterGoal = $bindable(), unit }: { waterGoal: number; unit: Unit } = $props()
+	let {
+		waterGoal = $bindable(),
+		isGoalAchieved = $bindable(),
+		unit,
+		waterTotal
+	}: {
+		waterGoal: number
+		isGoalAchieved: boolean
+		unit: Unit
+		waterTotal: number
+	} = $props()
+
 	let tempGoal = $state(0)
 	let isEditing = $state(false)
 
@@ -16,6 +27,11 @@
 
 	const saveGoal = async (): Promise<void> => {
 		if (Number.isNaN(tempGoal) || tempGoal <= 0) return
+
+		if (isGoalAchieved && tempGoal > waterTotal) {
+			isGoalAchieved = false
+			await conf.set('isGoalAchieved', false)
+		}
 
 		waterGoal = tempGoal
 		isEditing = false

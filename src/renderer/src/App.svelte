@@ -9,6 +9,7 @@
 	import WaterGoalDisplay from './components/WaterGoalDisplay.svelte'
 	import type { Preset } from './interfaces/Preset'
 	import type { Unit } from './interfaces/Unit'
+	import Modal from './components/Modal.svelte'
 
 	const conf = new Conf()
 
@@ -20,10 +21,21 @@
 	let waterTotal = $state(0)
 	let waterToAdd = $state(0)
 
+	let isGoalAchieved = $state(false)
+	let isGoalModalOpen = $state(false)
+	let goalSymbol = $derived(isGoalAchieved ? '🎉' : '')
+
 	const addWater = async (value: number): Promise<void> => {
 		if (Number.isNaN(value) || value <= 0) return
 
 		waterTotal += value
+
+		if (!isGoalAchieved && waterTotal >= waterGoal) {
+			isGoalAchieved = true
+			isGoalModalOpen = true
+
+			await conf.set('isGoalAchieved', isGoalAchieved)
+		}
 
 		await conf.set('waterTotal', waterTotal)
 	}
@@ -39,9 +51,11 @@
 
 			if (date.toDateString() === today.toDateString()) {
 				waterTotal = ((await conf.get('waterTotal')) as number) || 0
+				isGoalAchieved = ((await conf.get('isGoalAchieved')) as boolean) || false
 			} else {
-				await conf.set('waterTotal', 0)
 				await conf.set('date', today)
+				await conf.set('waterTotal', 0)
+				await conf.set('isGoalAchieved', false)
 			}
 		}
 
@@ -57,15 +71,22 @@
 	<div
 		class="relative bg-white flex flex-col items-center justify-center gap-4 py-6 border-3 border-darkblue rounded-b-lg dark:bg-zinc-800 darker:bg-zinc-950"
 	>
+		{#if isGoalAchieved && isGoalModalOpen}
+			<Modal close={() => (isGoalModalOpen = false)}>
+				<h1 class="font-bold">Congratulations!</h1>
+				<p class="text-center leading-5">You achieved your daily goal!</p>
+			</Modal>
+		{/if}
+
 		<ToggleMode />
 
 		<div class="text-center">
 			<h2 class="font-bold">My goal</h2>
 			<span class="flex items-center">
-				<WaterDisplay {unit} water={waterTotal} /> /&nbsp;<WaterGoalDisplay
-					bind:waterGoal
-					{unit}
-				/>
+				{goalSymbol}
+				<WaterDisplay {unit} water={waterTotal} /> /&nbsp;
+				<WaterGoalDisplay bind:waterGoal bind:isGoalAchieved {unit} {waterTotal} />&nbsp
+				{goalSymbol}
 			</span>
 		</div>
 
