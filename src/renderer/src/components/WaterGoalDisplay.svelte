@@ -8,11 +8,13 @@
 	let {
 		waterGoal = $bindable(),
 		isGoalAchieved = $bindable(),
+		errorMessage = $bindable(),
 		unit,
 		waterTotal
 	}: {
 		waterGoal: number
 		isGoalAchieved: boolean
+		errorMessage: string
 		unit: Unit
 		waterTotal: number
 	} = $props()
@@ -26,17 +28,17 @@
 	}
 
 	const saveGoal = async (): Promise<void> => {
-		if (Number.isNaN(tempGoal) || tempGoal <= 0) return
-
-		if (isGoalAchieved && tempGoal > waterTotal) {
-			isGoalAchieved = false
-			await conf.set('isGoalAchieved', false)
+		if (Number.isNaN(tempGoal) || tempGoal <= 0) {
+			errorMessage = 'Enter a valid number.'
+			return
 		}
 
 		waterGoal = tempGoal
+		isGoalAchieved = waterTotal >= waterGoal
 		isEditing = false
 
 		await conf.set('waterGoal', waterGoal)
+		await conf.set('isGoalAchieved', isGoalAchieved)
 	}
 
 	const handleKeydown = (e: KeyboardEvent): void => {

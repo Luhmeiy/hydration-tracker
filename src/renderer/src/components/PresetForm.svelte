@@ -6,15 +6,22 @@
 
 	const conf = new Conf()
 
-	let { presets = $bindable(), waterToAdd }: { presets: Preset[]; waterToAdd: number } = $props()
+	let {
+		presets = $bindable(),
+		errorMessage = $bindable(),
+		waterToAdd
+	}: {
+		presets: Preset[]
+		errorMessage: string
+		waterToAdd: number
+	} = $props()
 
 	let presetName = $state('')
 	let isAddingPreset = $state(false)
-	let presetError = $state('')
 
 	const startAdding = (): void => {
 		isAddingPreset = true
-		presetError = ''
+		errorMessage = ''
 	}
 
 	const cleanPreset = (): void => {
@@ -23,7 +30,7 @@
 	}
 
 	const validatePreset = (): string | null => {
-		if (!waterToAdd || waterToAdd <= 0) {
+		if (Number.isNaN(waterToAdd) || waterToAdd <= 0) {
 			return 'Enter a valid number.'
 		}
 
@@ -43,13 +50,10 @@
 	}
 
 	const addPreset = async (): Promise<void> => {
-		presetError = validatePreset()
+		errorMessage = validatePreset()
 
-		if (presetError) {
+		if (errorMessage) {
 			cleanPreset()
-
-			setTimeout(() => (presetError = ''), 5000)
-
 			return
 		}
 
@@ -71,10 +75,6 @@
 
 <div class="flex flex-col">
 	<Button action={startAdding} text="Create preset" />
-
-	{#if presetError}
-		<p class="text-close">{presetError}</p>
-	{/if}
 </div>
 
 {#if isAddingPreset}
