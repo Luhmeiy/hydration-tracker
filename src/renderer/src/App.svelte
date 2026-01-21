@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { Conf } from 'electron-conf/renderer'
 	import Button from './components/Button.svelte'
+	import EditPresets from './components/EditPresets.svelte'
 	import ErrorModal from './components/ErrorModal.svelte'
 	import Header from './components/Header.svelte'
 	import Modal from './components/Modal.svelte'
@@ -16,7 +17,9 @@
 
 	let unit: Unit = $state('L')
 	let date = $state(new Date())
+
 	let presets: Preset[] = $state([])
+	let isEditPreset = $state(true)
 
 	let waterGoal = $state(2500)
 	let waterTotal = $state(0)
@@ -77,9 +80,8 @@
 	<div
 		class="relative bg-white flex flex-col items-center justify-center gap-4 py-6 border-3 border-darkblue rounded-b-lg dark:bg-zinc-800 darker:bg-zinc-950"
 	>
-		{#if errorMessage}
-			<ErrorModal bind:errorMessage />
-		{/if}
+		<ErrorModal bind:errorMessage />
+		<EditPresets bind:isEditPreset bind:presets />
 
 		{#if isGoalAchieved && isGoalModalOpen}
 			<Modal close={() => (isGoalModalOpen = false)}>
@@ -117,6 +119,9 @@
 					<p>No presets found.</p>
 				{/if}
 			</div>
+			<button class="underline cursor-pointer" onclick={() => (isEditPreset = true)}>
+				Edit presets
+			</button>
 		</div>
 
 		<div class="text-center">

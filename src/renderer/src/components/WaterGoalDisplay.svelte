@@ -64,7 +64,7 @@
 		/>
 	</div>
 {:else}
-	<button onclick={startEditing}>
+	<button class="cursor-pointer" onclick={startEditing}>
 		<WaterDisplay {unit} water={waterGoal} />
 	</button>
 {/if}
