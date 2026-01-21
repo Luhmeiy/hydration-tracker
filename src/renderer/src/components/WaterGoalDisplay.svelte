@@ -22,6 +22,8 @@
 	let tempGoal = $state(0)
 	let isEditing = $state(false)
 
+	let inputRef: HTMLInputElement = $state()
+
 	const startEditing = (): void => {
 		tempGoal = waterGoal
 		isEditing = true
@@ -48,6 +50,12 @@
 			isEditing = false
 		}
 	}
+
+	$effect(() => {
+		if (isEditing && inputRef) {
+			inputRef.focus()
+		}
+	})
 </script>
 
 {#if isEditing}
@@ -59,7 +67,9 @@
 			step="100"
 			id="water-goal"
 			class="w-20 border-3 rounded-[2px] px-1"
+			bind:this={inputRef}
 			bind:value={tempGoal}
+			onblur={() => (isEditing = false)}
 			onkeydown={handleKeydown}
 		/>
 	</div>

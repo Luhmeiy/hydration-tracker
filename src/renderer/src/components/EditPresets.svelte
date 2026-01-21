@@ -1,16 +1,19 @@
 <script lang="ts">
 	import { Conf } from 'electron-conf/renderer'
 	import type { Preset } from '../interfaces/Preset'
+	import EditPresetInput from './EditPresetInput.svelte'
 	import Modal from './Modal.svelte'
 
 	const conf = new Conf()
 
 	let {
 		isEditPreset = $bindable(),
-		presets = $bindable()
+		presets = $bindable(),
+		errorMessage = $bindable()
 	}: {
 		isEditPreset: boolean
 		presets: Preset[]
+		errorMessage: string
 	} = $props()
 
 	const deletePreset = async (name: string): Promise<void> => {
@@ -22,11 +25,28 @@
 {#if isEditPreset}
 	<Modal close={() => (isEditPreset = false)}>
 		<h1 class="font-bold">Presets</h1>
-		<div class="w-full grid grid-cols-[1fr_auto_auto] gap-x-2">
+		<div class="w-full grid grid-cols-[1fr_auto_auto] gap-x-3">
 			{#each presets as preset (preset.name)}
-				<p class="wrap-anywhere">{preset.name}</p>
-				<p>{preset.value}</p>
-				<button class="flex cursor-pointer" onclick={() => deletePreset(preset.name)}>
+				<EditPresetInput
+					bind:presets
+					bind:errorMessage
+					name={preset.name}
+					key="name"
+					value={preset.name}
+				/>
+
+				<EditPresetInput
+					bind:presets
+					bind:errorMessage
+					name={preset.name}
+					key="value"
+					value={preset.value}
+				/>
+
+				<button
+					class="flex items-center cursor-pointer"
+					onclick={() => deletePreset(preset.name)}
+				>
 					🗑️
 				</button>
 			{/each}

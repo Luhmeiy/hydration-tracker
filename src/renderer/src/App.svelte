@@ -80,8 +80,11 @@
 	<div
 		class="relative bg-white flex flex-col items-center justify-center gap-4 py-6 border-3 border-darkblue rounded-b-lg dark:bg-zinc-800 darker:bg-zinc-950"
 	>
-		<ErrorModal bind:errorMessage />
-		<EditPresets bind:isEditPreset bind:presets />
+		<EditPresets bind:isEditPreset bind:presets bind:errorMessage />
+
+		{#if errorMessage}
+			<ErrorModal bind:errorMessage />
+		{/if}
 
 		{#if isGoalAchieved && isGoalModalOpen}
 			<Modal close={() => (isGoalModalOpen = false)}>
