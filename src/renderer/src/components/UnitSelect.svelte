@@ -9,11 +9,11 @@
 </script>
 
 <div class="flex flex-col gap-1 items-center">
-	<h2 class="font-bold">Unit</h2>
+	<h2 class="font-bold">Display Unit</h2>
 	<select
 		bind:value={unit}
 		onchange={changeUnit}
-		class="bg-lightblue border-3 border-darkblue px-2 py-1 rounded-[2px] cursor-pointer"
+		class="bg-lightblue border-3 border-darkblue px-2 py-1 rounded-[2px] cursor-pointer hover:bg-lightblue-hover"
 	>
 		<option value="mL">mL</option>
 		<option value="L" selected>L</option>

@@ -6,9 +6,17 @@
 
 @theme {
 	--color-darkblue: #1b7fde;
+	--color-darkblue-hover: #0e3f6f;
+	--color-darkblue-active: #3992e7;
 	--color-lightblue: #bde0fe;
+	--color-lightblue-hover: #deeffe;
+	--color-lightblue-active: #91cbfd;
 	--color-close: #ffb3d0;
+	--color-close-hover: #ff72a8;
+	--color-close-active: #ffbed7;
 	--color-minimize: #ffe59d;
+	--color-minimize-hover: #ffbe08;
+	--color-minimize-active: #ffe397;
 
 	--font-silkscreen: 'Silkscreen', sans-serif;
 }
@@ -17,15 +25,31 @@
 :host {
 	@variant dark {
 		--color-darkblue: #4d9eff;
+		--color-darkblue-hover: #b8d8ff;
+		--color-darkblue-active: #3992e7;
 		--color-lightblue: #1e3855;
+		--color-lightblue-hover: #0f1c2a;
+		--color-lightblue-active: #284b72;
 		--color-close: #ff4081;
+		--color-close-hover: #d70049;
+		--color-close-active: #ff669a;
 		--color-minimize: #ffb74d;
+		--color-minimize-hover: #e08500;
+		--color-minimize-active: #ffcd82;
 	}
 
 	@variant darker {
 		--color-darkblue: #0073ff;
+		--color-darkblue-hover: #80b9ff;
+		--color-darkblue-active: #3992e7;
 		--color-lightblue: #192f48;
+		--color-lightblue-hover: #0c1724;
+		--color-lightblue-active: #244367;
 		--color-close: #ff4081;
+		--color-close-hover: #d70049;
+		--color-close-active: #ff669a;
 		--color-minimize: #ffb74d;
+		--color-minimize-hover: #e08500;
+		--color-minimize-active: #ffcd82;
 	}
 }

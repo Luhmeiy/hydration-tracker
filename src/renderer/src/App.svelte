@@ -19,7 +19,7 @@
 	let date = $state(new Date())
 
 	let presets: Preset[] = $state([])
-	let isEditPreset = $state(true)
+	let isEditPreset = $state(false)
 
 	let waterGoal = $state(2500)
 	let waterTotal = $state(0)
@@ -73,7 +73,7 @@
 </script>
 
 <div
-	class="bg-lightblue flex flex-col gap-1 p-2 font-silkscreen border-3 border-darkblue rounded-lg text-darkblue overflow-x-hidden transition-colors duration-500 **:transition-colors **:duration-500 grey:bg-red-500"
+	class="bg-lightblue flex flex-col gap-1 p-2 font-silkscreen border-3 border-darkblue rounded-lg text-darkblue overflow-x-hidden transition-colors duration-500 **:transition-colors **:duration-500"
 >
 	<Header />
 
@@ -98,20 +98,24 @@
 		<div class="text-center">
 			<h2 class="font-bold">My goal</h2>
 			<span class="flex items-center">
-				{goalSymbol}
-				<WaterDisplay {unit} water={waterTotal} /> /&nbsp;
+				<span class="select-none duration-200! hover:rotate-20 hover:scale-110">
+					{goalSymbol}
+				</span>
+				&nbsp<WaterDisplay {unit} water={waterTotal} />&nbsp/&nbsp
 				<WaterGoalDisplay
 					bind:waterGoal
 					bind:isGoalAchieved
 					bind:errorMessage
 					{unit}
 					{waterTotal}
-				/>&nbsp
-				{goalSymbol}
+				/>
+				&nbsp<span class="select-none duration-200! hover:rotate-20 hover:scale-110">
+					{goalSymbol}
+				</span>
 			</span>
 		</div>
 
-		<div class="flex flex-col items-center">
+		<div class="flex flex-col items-center gap-1">
 			<h2 class="font-bold">Presets</h2>
 			<div class="flex justify-center flex-wrap gap-2">
 				{#if presets.length > 0}
@@ -122,9 +126,15 @@
 					<p>No presets found.</p>
 				{/if}
 			</div>
-			<button class="underline cursor-pointer" onclick={() => (isEditPreset = true)}>
-				Edit presets
-			</button>
+
+			{#if presets.length > 0}
+				<button
+					class="underline cursor-pointer hover:text-darkblue-hover active:text-darkblue-active"
+					onclick={() => (isEditPreset = true)}
+				>
+					Edit presets
+				</button>
+			{/if}
 		</div>
 
 		<div class="text-center">

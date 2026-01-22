@@ -22,7 +22,7 @@
 	}
 </script>
 
-{#if isEditPreset}
+{#if presets.length > 0 && isEditPreset}
 	<Modal close={() => (isEditPreset = false)}>
 		<h1 class="font-bold">Presets</h1>
 		<div class="w-full grid grid-cols-[1fr_auto_auto] gap-x-3">
@@ -44,7 +44,7 @@
 				/>
 
 				<button
-					class="flex items-center cursor-pointer"
+					class="flex items-center cursor-pointer duration-200! hover:rotate-20 hover:scale-110"
 					onclick={() => deletePreset(preset.name)}
 				>
 					🗑️

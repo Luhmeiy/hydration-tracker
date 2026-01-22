@@ -74,7 +74,10 @@
 		/>
 	</div>
 {:else}
-	<button class="cursor-pointer" onclick={startEditing}>
+	<button
+		class="h-8 cursor-pointer hover:text-darkblue-hover active:text-darkblue-active"
+		onclick={startEditing}
+	>
 		<WaterDisplay {unit} water={waterGoal} />
 	</button>
 {/if}

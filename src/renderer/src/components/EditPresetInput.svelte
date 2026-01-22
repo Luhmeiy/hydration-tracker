@@ -89,7 +89,9 @@
 	/>
 {:else}
 	<button
-		class="h-8 flex items-center {key === 'name' ? 'text-start' : 'justify-end'} cursor-pointer"
+		class="h-8 flex items-center {key === 'name'
+			? 'text-start'
+			: 'justify-end'} cursor-pointer hover:text-darkblue-hover active:text-darkblue-active"
 		onclick={startEditing}
 	>
 		{value}

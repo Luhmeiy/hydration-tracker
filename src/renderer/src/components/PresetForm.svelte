@@ -73,9 +73,7 @@
 	}
 </script>
 
-<div class="flex flex-col">
-	<Button action={startAdding} text="Create preset" />
-</div>
+<Button action={startAdding} text="Create preset" />
 
 {#if isAddingPreset}
 	<Modal close={cleanPreset}>
