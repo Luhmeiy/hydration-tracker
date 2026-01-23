@@ -13,7 +13,7 @@
 - [✨ Features](#✨-features)
 - [🛠️ Planned Features](#🛠️-planned-features)
 - [📚 What I Learned](#📚-what-i-learned)
-- [🤔 How To Use](#🤔-how-to-use)
+- [🚀 Quick Start](#🚀-quick-start)
 
 ## 📑 About
 
@@ -51,7 +51,19 @@ This project was a lot of fun to develop. As my first electron app, I learned qu
 
 It was a joy finally using Svelte in a bigger project and having the opportunity to familiarize myself with its concepts, like the $derived rune, which I had not previously used.
 
-## 🤔 How To Use
+## 🚀 Quick Start
+
+### Option 1: Download Pre-built Releases (Recommended)
+
+Download the latest setup files for your operating system from the [Releases](https://github.com/Luhmeiy/hydration-tracker/releases) page:
+
+- **Windows**: Download `.exe` installer
+- **Linux**:
+    - Download `.AppImage` (works on most distributions)
+    - Download `.deb` for Debian/Ubuntu-based systems
+- **macOS**: Currently unavailable
+
+### Option 2: Build from Source
 
 - Clone this repository:
 
