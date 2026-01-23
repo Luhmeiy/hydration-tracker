@@ -5,7 +5,7 @@
 	const minimizeWindow = (): void => window.electronAPI.minimizeApp()
 </script>
 
-<div class="flex">
+<header class="flex">
 	<h1 style="-webkit-app-region: drag" class="text-xl flex-1 select-none">Hydration Tracker</h1>
 
 	<div class="flex gap-2 items-center">
@@ -20,4 +20,4 @@
 			bgColor="bg-close hover:bg-close-hover active:bg-close-active"
 		/>
 	</div>
-</div>
+</header>

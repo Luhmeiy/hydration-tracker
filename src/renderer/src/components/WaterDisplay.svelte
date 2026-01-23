@@ -1,5 +1,12 @@
 <script lang="ts">
-	let { unit, water } = $props()
+	import type { Unit } from '../interfaces/Unit'
+
+	interface WaterDisplayProps {
+		unit: Unit
+		water: number
+	}
+
+	let { unit, water }: WaterDisplayProps = $props()
 
 	let convertedWater = $derived(() => {
 		switch (unit) {

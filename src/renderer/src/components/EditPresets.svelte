@@ -8,7 +8,7 @@
 	const conf = new Conf()
 
 	interface EditPresetsProps {
-		errorMessage: string
+		errorMessage: string | null
 		isEditPreset: boolean
 		presets: Preset[]
 	}

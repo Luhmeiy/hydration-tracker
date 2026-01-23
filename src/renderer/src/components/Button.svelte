@@ -1,5 +1,10 @@
 <script lang="ts">
-	let { action, text }: { action: () => void; text: string } = $props()
+	interface ButtonProps {
+		action: () => void
+		text: string
+	}
+
+	let { action, text }: ButtonProps = $props()
 </script>
 
 <button

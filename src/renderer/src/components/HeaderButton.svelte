@@ -1,6 +1,11 @@
 <script lang="ts">
-	let { action, label, bgColor }: { action: () => void; label: string; bgColor: string } =
-		$props()
+	interface HeaderButtonProps {
+		action: () => void
+		bgColor: string
+		label: string
+	}
+
+	let { action, bgColor, label }: HeaderButtonProps = $props()
 </script>
 
 <button

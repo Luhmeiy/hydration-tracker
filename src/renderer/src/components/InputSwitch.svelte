@@ -12,14 +12,9 @@
 
 	let { children, action, value, isPreset, isText }: InputSwitchProps = $props()
 
-	let inputRef: HTMLInputElement = $state()
-	let tempValue: string | number = $state()
+	let inputRef = $state<HTMLInputElement>()
+	let tempValue = $derived<string | number>(value)
 	let isEditing = $state(false)
-
-	const startEditing = (): void => {
-		tempValue = value
-		isEditing = true
-	}
 
 	$effect(() => {
 		if (isEditing && inputRef) {
@@ -56,7 +51,7 @@
 		class="h-8 flex items-center {isText
 			? 'text-start'
 			: 'justify-end'} cursor-pointer hover:text-darkblue-hover active:text-darkblue-active"
-		onclick={startEditing}
+		onclick={() => (isEditing = true)}
 	>
 		{@render children()}
 	</button>

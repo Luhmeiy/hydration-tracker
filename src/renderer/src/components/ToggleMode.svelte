@@ -12,7 +12,7 @@
 	])
 
 	let mode = $state<Mode>('light')
-	const symbol = $derived(modeSymbols.get(mode) || '☀️')
+	let symbol = $derived(modeSymbols.get(mode) || '☀️')
 
 	const getNextMode = (currentMode: Mode): Mode => {
 		const keys = Array.from(modeSymbols.keys())
@@ -34,7 +34,7 @@
 
 	$effect(() => {
 		const getTheme = async (): Promise<void> => {
-			mode = (await conf.get('mode')) as Mode
+			mode = ((await conf.get('mode')) as Mode) || 'light'
 
 			if (mode) {
 				document.documentElement.classList.add(mode)

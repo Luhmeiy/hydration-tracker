@@ -1,14 +1,15 @@
 <script lang="ts">
 	import { Conf } from 'electron-conf/renderer'
 	import type { Unit } from '../interfaces/Unit'
-	let { unit = $bindable() }: { unit: Unit } = $props()
 
 	const conf = new Conf()
+
+	let { unit = $bindable() }: { unit: Unit } = $props()
 
 	const changeUnit = async (): Promise<void> => await conf.set('unit', unit)
 </script>
 
-<div class="flex flex-col gap-1 items-center">
+<section class="flex flex-col gap-1 items-center">
 	<h2 class="font-bold">Display Unit</h2>
 	<select
 		bind:value={unit}
@@ -20,4 +21,4 @@
 		<option value="floz">fl oz</option>
 		<option value="cup">cups</option>
 	</select>
-</div>
+</section>

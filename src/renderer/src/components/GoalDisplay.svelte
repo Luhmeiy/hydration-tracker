@@ -3,33 +3,28 @@
 	import type { Unit } from '../interfaces/Unit'
 	import GoalSymbol from './GoalSymbol.svelte'
 	import InputSwitch from './InputSwitch.svelte'
+	import Modal from './Modal.svelte'
 	import WaterDisplay from './WaterDisplay.svelte'
+	import { validateNumber } from '../utils/validateNumber'
 
 	const conf = new Conf()
 
 	interface GoalDisplayProps {
 		errorMessage: string | null
-		isGoalAchieved: boolean
+		unit: Unit
 		waterGoal: number
 		waterTotal: number
-		unit: Unit
 	}
 
 	let {
 		errorMessage = $bindable(),
-		isGoalAchieved = $bindable(),
 		waterGoal = $bindable(),
 		waterTotal = $bindable(),
 		unit
 	}: GoalDisplayProps = $props()
 
-	const validateNumber = (value: number): string | null => {
-		if (Number.isNaN(value) || value <= 0) {
-			return 'Enter a valid number.'
-		}
-
-		return null
-	}
+	let isGoalAchieved = $derived(waterTotal >= waterGoal)
+	let isGoalModalOpen = $derived(isGoalAchieved)
 
 	const saveWater = async (type: 'total' | 'goal', value: number): Promise<boolean> => {
 		errorMessage = validateNumber(value)
@@ -46,13 +41,18 @@
 				break
 		}
 
-		isGoalAchieved = waterTotal >= waterGoal
-		await conf.set('isGoalAchieved', isGoalAchieved)
 		return false
 	}
 </script>
 
-<div class="text-center">
+{#if isGoalAchieved && isGoalModalOpen}
+	<Modal close={() => (isGoalModalOpen = false)}>
+		<h1 class="font-bold">Congratulations!</h1>
+		<p class="text-center leading-5">You achieved your daily goal!</p>
+	</Modal>
+{/if}
+
+<section class="text-center">
 	<h2 class="font-bold">My goal</h2>
 	<span class="flex items-center">
 		<GoalSymbol {isGoalAchieved} />
@@ -67,4 +67,4 @@
 		&nbsp
 		<GoalSymbol {isGoalAchieved} />
 	</span>
-</div>
+</section>

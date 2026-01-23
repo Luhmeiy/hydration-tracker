@@ -9,7 +9,7 @@
 	const conf = new Conf()
 
 	interface PresetFormProps {
-		errorMessage: string
+		errorMessage: string | null
 		presets: Preset[]
 		waterToAdd: number
 	}
