@@ -3,18 +3,22 @@
 	import type { Preset } from '../interfaces/Preset'
 	import Button from './Button.svelte'
 	import Modal from './Modal.svelte'
+	import { handleKeydown } from '../utils/handleKeydown'
+	import { validatePreset } from '../utils/validatePreset'
 
 	const conf = new Conf()
 
-	let {
-		presets = $bindable(),
-		errorMessage = $bindable(),
-		waterToAdd
-	}: {
-		presets: Preset[]
+	interface PresetFormProps {
 		errorMessage: string
+		presets: Preset[]
 		waterToAdd: number
-	} = $props()
+	}
+
+	let {
+		errorMessage = $bindable(),
+		presets = $bindable(),
+		waterToAdd
+	}: PresetFormProps = $props()
 
 	let presetName = $state('')
 	let isAddingPreset = $state(false)
@@ -29,28 +33,11 @@
 		isAddingPreset = false
 	}
 
-	const validatePreset = (): string | null => {
-		if (Number.isNaN(waterToAdd) || waterToAdd <= 0) {
-			return 'Enter a valid number.'
-		}
-
-		if (!presetName.trim()) {
-			return 'Preset name is required.'
-		}
-
-		if (presets.some((preset) => preset.value === waterToAdd)) {
-			return 'Preset value already in use.'
-		}
-
-		if (presets.some((preset) => preset.name === presetName)) {
-			return 'Preset name already in use.'
-		}
-
-		return null
-	}
-
 	const addPreset = async (): Promise<void> => {
-		errorMessage = validatePreset()
+		let nameError = validatePreset(presets, presetName, 'name')
+		let valueError = validatePreset(presets, waterToAdd, 'value')
+
+		errorMessage = nameError || valueError
 
 		if (errorMessage) {
 			cleanPreset()
@@ -62,14 +49,6 @@
 		await conf.set('presets', JSON.stringify(presets))
 
 		cleanPreset()
-	}
-
-	const handleKeydown = (e: KeyboardEvent): void => {
-		if (e.key === 'Enter') {
-			addPreset()
-		} else if (e.key === 'Escape') {
-			isAddingPreset = false
-		}
 	}
 </script>
 
@@ -84,7 +63,7 @@
 				id="preset-add"
 				class="w-auto border-3 rounded-[2px] px-1"
 				bind:value={presetName}
-				onkeydown={handleKeydown}
+				onkeydown={(e) => handleKeydown(e, addPreset, () => (isAddingPreset = false))}
 			/>
 		</div>
 

@@ -3,13 +3,12 @@
 	import Button from './components/Button.svelte'
 	import EditPresets from './components/EditPresets.svelte'
 	import ErrorModal from './components/ErrorModal.svelte'
+	import GoalDisplay from './components/GoalDisplay.svelte'
 	import Header from './components/Header.svelte'
 	import Modal from './components/Modal.svelte'
 	import PresetForm from './components/PresetForm.svelte'
 	import ToggleMode from './components/ToggleMode.svelte'
 	import UnitSelect from './components/UnitSelect.svelte'
-	import WaterDisplay from './components/WaterDisplay.svelte'
-	import WaterGoalDisplay from './components/WaterGoalDisplay.svelte'
 	import type { Preset } from './interfaces/Preset'
 	import type { Unit } from './interfaces/Unit'
 
@@ -27,7 +26,6 @@
 
 	let isGoalAchieved = $state(false)
 	let isGoalModalOpen = $state(false)
-	let goalSymbol = $derived(isGoalAchieved ? '🎉' : '')
 
 	let errorMessage = $state('')
 
@@ -94,26 +92,7 @@
 		{/if}
 
 		<ToggleMode />
-
-		<div class="text-center">
-			<h2 class="font-bold">My goal</h2>
-			<span class="flex items-center">
-				<span class="select-none duration-200! hover:rotate-20 hover:scale-110">
-					{goalSymbol}
-				</span>
-				&nbsp<WaterDisplay {unit} water={waterTotal} />&nbsp/&nbsp
-				<WaterGoalDisplay
-					bind:waterGoal
-					bind:isGoalAchieved
-					bind:errorMessage
-					{unit}
-					{waterTotal}
-				/>
-				&nbsp<span class="select-none duration-200! hover:rotate-20 hover:scale-110">
-					{goalSymbol}
-				</span>
-			</span>
-		</div>
+		<GoalDisplay bind:errorMessage bind:isGoalAchieved bind:waterGoal bind:waterTotal {unit} />
 
 		<div class="flex flex-col items-center gap-1">
 			<h2 class="font-bold">Presets</h2>

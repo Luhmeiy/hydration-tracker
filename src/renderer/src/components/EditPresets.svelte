@@ -1,20 +1,43 @@
 <script lang="ts">
 	import { Conf } from 'electron-conf/renderer'
 	import type { Preset } from '../interfaces/Preset'
-	import EditPresetInput from './EditPresetInput.svelte'
+	import InputSwitch from './InputSwitch.svelte'
 	import Modal from './Modal.svelte'
+	import { validatePreset } from '../utils/validatePreset'
 
 	const conf = new Conf()
 
-	let {
-		isEditPreset = $bindable(),
-		presets = $bindable(),
-		errorMessage = $bindable()
-	}: {
+	interface EditPresetsProps {
+		errorMessage: string
 		isEditPreset: boolean
 		presets: Preset[]
-		errorMessage: string
-	} = $props()
+	}
+
+	let {
+		errorMessage = $bindable(),
+		isEditPreset = $bindable(),
+		presets = $bindable()
+	}: EditPresetsProps = $props()
+
+	const editPreset = async (
+		key: 'name' | 'value',
+		name: string,
+		value: string | number
+	): Promise<boolean> => {
+		errorMessage = validatePreset(presets, value, key)
+		if (errorMessage) return true
+
+		presets = presets.map((preset) => {
+			if (preset.name === name) {
+				return { ...preset, [key]: value }
+			}
+
+			return preset
+		})
+
+		await conf.set('presets', JSON.stringify(presets))
+		return false
+	}
 
 	const deletePreset = async (name: string): Promise<void> => {
 		presets = presets.filter((preset) => preset.name !== name)
@@ -27,24 +50,25 @@
 		<h1 class="font-bold">Presets</h1>
 		<div class="w-full grid grid-cols-[1fr_auto_auto] gap-x-3">
 			{#each presets as preset (preset.name)}
-				<EditPresetInput
-					bind:presets
-					bind:errorMessage
-					name={preset.name}
-					key="name"
+				<InputSwitch
+					action={(value: string | number) => editPreset('name', preset.name, value)}
 					value={preset.name}
-				/>
+					isText
+					isPreset
+				>
+					{preset.name}
+				</InputSwitch>
 
-				<EditPresetInput
-					bind:presets
-					bind:errorMessage
-					name={preset.name}
-					key="value"
+				<InputSwitch
+					action={(value: string | number) => editPreset('value', preset.name, value)}
 					value={preset.value}
-				/>
+					isPreset
+				>
+					{preset.value}
+				</InputSwitch>
 
 				<button
-					class="flex items-center cursor-pointer duration-200! hover:rotate-20 hover:scale-110"
+					class="flex items-center cursor-pointer transition-transform! duration-200! hover:rotate-20 hover:scale-110"
 					onclick={() => deletePreset(preset.name)}
 				>
 					🗑️
