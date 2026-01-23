@@ -57,7 +57,9 @@
 	<span class="flex items-center">
 		<GoalSymbol {isGoalAchieved} />
 		&nbsp
-		<WaterDisplay {unit} water={waterTotal} />
+		<InputSwitch value={waterTotal} action={(value: number) => saveWater('total', value)}>
+			<WaterDisplay {unit} water={waterTotal} />
+		</InputSwitch>
 		&nbsp/&nbsp
 		<InputSwitch value={waterGoal} action={(value: number) => saveWater('goal', value)}>
 			<WaterDisplay {unit} water={waterGoal} />
