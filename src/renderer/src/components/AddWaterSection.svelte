@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { Preset } from '../interfaces/Preset'
+	import AddPreset from './AddPreset.svelte'
 	import Button from './Button.svelte'
-	import PresetForm from './PresetForm.svelte'
 
 	interface PresetSectionProps {
 		addWater: (value: number) => Promise<void>
@@ -38,7 +38,7 @@
 		<div class="flex gap-2">
 			<Button action={() => addWater(waterToAdd)} text="Drink" />
 
-			<PresetForm bind:presets bind:errorMessage {waterToAdd} />
+			<AddPreset bind:presets bind:errorMessage {waterToAdd} />
 		</div>
 	</div>
 </div>

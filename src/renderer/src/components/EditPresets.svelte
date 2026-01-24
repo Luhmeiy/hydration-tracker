@@ -70,6 +70,7 @@
 				<button
 					class="flex items-center cursor-pointer transition-transform! duration-200! hover:rotate-20 hover:scale-110"
 					onclick={() => deletePreset(preset.name)}
+					title="delete preset"
 				>
 					🗑️
 				</button>

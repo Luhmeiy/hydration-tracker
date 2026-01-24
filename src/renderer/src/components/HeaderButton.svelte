@@ -11,5 +11,6 @@
 <button
 	class="h-5 w-5 {bgColor} border-3 border-darkblue rounded-full cursor-pointer"
 	aria-label={label}
+	title={label}
 	onclick={action}
 ></button>

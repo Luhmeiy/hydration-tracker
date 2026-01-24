@@ -48,6 +48,7 @@
 <button
 	onclick={toggle}
 	class="absolute top-2 right-2 w-9 h-9 bg-lightblue border-3 border-darkblue rounded cursor-pointer hover:bg-lightblue-hover active:bg-lightblue-active"
+	title="change theme"
 >
 	{symbol}
 </button>

@@ -16,6 +16,7 @@
 	<button
 		class="absolute right-2 top-1 font-bold text-close cursor-pointer hover:text-close-hover active:text-close-active"
 		onclick={close}
+		title="close modal"
 	>
 		x
 	</button>

@@ -56,12 +56,12 @@
 
 {#if isAddingPreset}
 	<Modal close={cleanPreset}>
-		<div class="flex flex-col gap-2">
+		<div class="w-full flex flex-col gap-2">
 			<label for="preset-add">Preset name:</label>
 			<input
 				type="text"
 				id="preset-add"
-				class="w-auto border-3 rounded-[2px] px-1"
+				class="max-w-64 border-3 rounded-[2px] px-1"
 				bind:value={presetName}
 				onkeydown={(e) => handleKeydown(e, addPreset, () => (isAddingPreset = false))}
 			/>

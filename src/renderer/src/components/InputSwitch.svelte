@@ -26,14 +26,14 @@
 {#if isEditing}
 	<div class="flex gap-2 items-center">
 		{#if !isPreset}
-			<label for="water-goal">(in mL):</label>
+			<label for="water">(in mL):</label>
 		{/if}
 
 		<input
 			type={isText ? 'text' : 'number'}
 			min="0"
 			step="100"
-			id="water-goal"
+			id="water"
 			class="{isText ? 'w-full' : 'w-20'} border-3 rounded-[2px] px-1"
 			bind:this={inputRef}
 			bind:value={tempValue}
@@ -52,6 +52,7 @@
 			? 'text-start'
 			: 'justify-end'} cursor-pointer hover:text-darkblue-hover active:text-darkblue-active"
 		onclick={() => (isEditing = true)}
+		title="edit value"
 	>
 		{@render children()}
 	</button>
