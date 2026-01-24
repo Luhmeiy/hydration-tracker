@@ -11,8 +11,9 @@ conf.registerRendererListener()
 function createWindow(): void {
 	// Create the browser window.
 	const mainWindow = new BrowserWindow({
+		title: 'Hydration Tracker',
 		width: 400,
-		height: 500,
+		height: 550,
 		show: false,
 		resizable: false,
 		maximizable: false,
