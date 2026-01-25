@@ -34,8 +34,8 @@
 	}
 
 	const addPreset = async (): Promise<void> => {
-		let nameError = validatePreset(presets, presetName, 'name')
-		let valueError = validatePreset(presets, waterToAdd, 'value')
+		let nameError = validatePreset(presets, presetName)
+		let valueError = validatePreset(presets, waterToAdd)
 
 		errorMessage = nameError || valueError
 

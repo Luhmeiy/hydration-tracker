@@ -24,7 +24,7 @@
 		name: string,
 		value: string | number
 	): Promise<boolean> => {
-		errorMessage = validatePreset(presets, value, key)
+		errorMessage = validatePreset(presets, value)
 		if (errorMessage) return true
 
 		presets = presets.map((preset) => {

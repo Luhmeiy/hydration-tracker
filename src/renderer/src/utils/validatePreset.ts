@@ -1,11 +1,7 @@
 import type { Preset } from './../interfaces/Preset'
 
-export const validatePreset = (
-	presets: Preset[],
-	value: string | number,
-	key: 'name' | 'value'
-): string | null => {
-	if (typeof value === 'number' && value <= 0) {
+export const validatePreset = (presets: Preset[], value: string | number): string | null => {
+	if (typeof value === 'number' && value < 0) {
 		return 'Enter a valid number.'
 	}
 
@@ -13,8 +9,8 @@ export const validatePreset = (
 		return 'Preset name is required.'
 	}
 
-	if (presets.some((preset) => preset[key] === value)) {
-		return `Preset ${key} already in use.`
+	if (presets.some((preset) => preset.name === value)) {
+		return 'Preset name already in use.'
 	}
 
 	return null
