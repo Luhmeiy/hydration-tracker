@@ -42,13 +42,17 @@
 	const deletePreset = async (name: string): Promise<void> => {
 		presets = presets.filter((preset) => preset.name !== name)
 		await conf.set('presets', JSON.stringify(presets))
+
+		if (presets.length === 0) {
+			isEditPreset = false
+		}
 	}
 </script>
 
 {#if presets.length > 0 && isEditPreset}
 	<Modal close={() => (isEditPreset = false)}>
 		<h1 class="font-bold">Presets</h1>
-		<div class="w-full grid grid-cols-[1fr_auto_auto] gap-x-3">
+		<div class="w-full grid grid-cols-[1fr_auto_auto] gap-x-3 gap-y-0.5">
 			{#each presets as preset (preset.name)}
 				<InputSwitch
 					action={(value: string | number) => editPreset('name', preset.name, value)}

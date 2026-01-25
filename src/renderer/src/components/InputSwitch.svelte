@@ -48,9 +48,9 @@
 	</div>
 {:else}
 	<button
-		class="h-8 flex items-center {isText
+		class="min-h-8 flex items-center {isText
 			? 'text-start'
-			: 'justify-end'} cursor-pointer hover:text-darkblue-hover active:text-darkblue-active"
+			: 'justify-end'} cursor-pointer break-all leading-4 hover:text-darkblue-hover active:text-darkblue-active"
 		onclick={() => (isEditing = true)}
 		title="edit value"
 	>

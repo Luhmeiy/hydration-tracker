@@ -13,7 +13,7 @@ function createWindow(): void {
 	const mainWindow = new BrowserWindow({
 		title: 'Hydration Tracker',
 		width: 400,
-		height: 550,
+		height: 560,
 		show: false,
 		resizable: false,
 		maximizable: false,
