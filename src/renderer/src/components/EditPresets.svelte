@@ -68,7 +68,7 @@
 					value={preset.value}
 					isPreset
 				>
-					{preset.value}
+					{preset.value || 'Empty'}
 				</InputSwitch>
 
 				<button
