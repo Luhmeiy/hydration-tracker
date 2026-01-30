@@ -1,4 +1,4 @@
-import { app, shell, BrowserWindow, ipcMain } from 'electron'
+import { app, shell, BrowserWindow, ipcMain, Tray, Menu } from 'electron'
 import { Conf, useConf } from 'electron-conf/main'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
@@ -45,9 +45,9 @@ function createWindow(): void {
 		mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
 	}
 
-	ipcMain.on('close-app', () => {
+	ipcMain.on('hide-app', () => {
 		if (mainWindow) {
-			mainWindow.close()
+			mainWindow.hide()
 		}
 	})
 
@@ -56,6 +56,34 @@ function createWindow(): void {
 			mainWindow.minimize()
 		}
 	})
+
+	function createTray() {
+		const tray = new Tray(icon)
+
+		const menu = Menu.buildFromTemplate([
+			{ label: 'Show App', click: () => mainWindow.show() },
+			{ label: 'Quit', click: () => app.quit() }
+		])
+
+		tray.setToolTip('Hydration Tracker')
+		tray.setContextMenu(menu)
+
+		tray.on('click', toggleMainWindow)
+	}
+
+	function toggleMainWindow() {
+		if (mainWindow.isVisible()) {
+			mainWindow.hide()
+		} else {
+			const position = mainWindow.getNormalBounds()
+			mainWindow.setPosition(position.x, position.y)
+
+			mainWindow.show()
+			mainWindow.focus()
+		}
+	}
+
+	createTray()
 }
 
 // This method will be called when Electron has finished
@@ -88,7 +116,7 @@ app.whenReady().then(() => {
 // explicitly with Cmd + Q.
 app.on('window-all-closed', () => {
 	if (process.platform !== 'darwin') {
-		app.quit()
+		app.hide()
 	}
 })
 

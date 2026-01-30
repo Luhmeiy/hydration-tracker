@@ -1,7 +1,7 @@
 <script lang="ts">
 	import HeaderButton from './HeaderButton.svelte'
 
-	const closeWindow = (): void => window.electronAPI.closeApp()
+	const hideWindow = (): void => window.electronAPI.hideApp()
 	const minimizeWindow = (): void => window.electronAPI.minimizeApp()
 </script>
 
@@ -15,8 +15,8 @@
 			bgColor="bg-minimize hover:bg-minimize-hover active:bg-minimize-active"
 		/>
 		<HeaderButton
-			label="close window"
-			action={closeWindow}
+			label="hide window"
+			action={hideWindow}
 			bgColor="bg-close hover:bg-close-hover active:bg-close-active"
 		/>
 	</div>

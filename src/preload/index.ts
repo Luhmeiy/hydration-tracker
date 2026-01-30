@@ -12,7 +12,7 @@ if (process.contextIsolated) {
 		contextBridge.exposeInMainWorld('electron', electronAPI)
 		contextBridge.exposeInMainWorld('api', api)
 		contextBridge.exposeInMainWorld('electronAPI', {
-			closeApp: () => ipcRenderer.send('close-app'),
+			hideApp: () => ipcRenderer.send('hide-app'),
 			minimizeApp: () => ipcRenderer.send('minimize-app')
 		})
 	} catch (error) {
