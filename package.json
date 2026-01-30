@@ -1,7 +1,7 @@
 {
 	"name": "hydration-tracker",
 	"version": "1.0.0",
-	"description": "Stay hydrated, stay healthy! 💦 ",
+	"description": "Stay hydrated, stay healthy! 💦",
 	"main": "./out/main/index.js",
 	"author": "example.com",
 	"homepage": "https://electron-vite.org",

@@ -1,12 +1,20 @@
-import { app, shell, BrowserWindow, ipcMain, Tray, Menu } from 'electron'
+import { BrowserWindow, Menu, Notification, Tray, app, ipcMain, shell } from 'electron'
 import { Conf, useConf } from 'electron-conf/main'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 
 const conf = new Conf()
-
 conf.registerRendererListener()
+
+const titles = ['💧 Hydration Time!', '🚰 Water Break!', '🌊 Stay Hydrated!', '💦 Drink Up!']
+
+const bodies = [
+	'Your body needs water to function properly.',
+	'Drinking water helps maintain focus and energy.',
+	'Time for a refreshing glass of water.',
+	'Stay hydrated to keep your mind sharp.'
+]
 
 function createWindow(): void {
 	// Create the browser window.
@@ -75,16 +83,43 @@ function createWindow(): void {
 		if (mainWindow.isVisible()) {
 			mainWindow.hide()
 		} else {
-			const position = mainWindow.getNormalBounds()
-			mainWindow.setPosition(position.x, position.y)
-
 			mainWindow.show()
 			mainWindow.focus()
 		}
 	}
 
+	function getRandomNotification() {
+		const randomTitle = titles[Math.floor(Math.random() * titles.length)]
+		const randomBody = bodies[Math.floor(Math.random() * bodies.length)]
+
+		return { title: randomTitle, body: randomBody }
+	}
+
+	function createNotification() {
+		const { title, body } = getRandomNotification()
+
+		const notification = new Notification({
+			title,
+			body,
+			icon,
+			silent: false
+		})
+
+		notification.on('click', () => {
+			if (mainWindow && !mainWindow.isVisible()) {
+				mainWindow.show()
+				mainWindow.focus()
+			}
+		})
+
+		notification.show()
+	}
+
 	createTray()
+	setInterval(createNotification, 3600000)
 }
+
+app.setName('Hydration Tracker')
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
