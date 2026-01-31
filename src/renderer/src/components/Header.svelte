@@ -1,12 +1,16 @@
 <script lang="ts">
 	import HeaderButton from './HeaderButton.svelte'
 
+	let { isSettings }: { isSettings: boolean } = $props()
+
 	const hideWindow = (): void => window.electronAPI.hideApp()
 	const minimizeWindow = (): void => window.electronAPI.minimizeApp()
 </script>
 
 <header class="flex">
-	<h1 style="-webkit-app-region: drag" class="text-xl flex-1 select-none">Hydration Tracker</h1>
+	<h1 style="-webkit-app-region: drag" class="text-xl flex-1 select-none">
+		{!isSettings ? 'Hydration Tracker' : 'Settings'}
+	</h1>
 
 	<div class="flex gap-2 items-center">
 		<HeaderButton
