@@ -7,153 +7,165 @@ import icon from '../../resources/icon.png?asset'
 const conf = new Conf()
 conf.registerRendererListener()
 
-const titles = ['💧 Hydration Time!', '🚰 Water Break!', '🌊 Stay Hydrated!', '💦 Drink Up!']
+const NOTIFICATION_TITLES = [
+	'💧 Hydration Time!',
+	'🚰 Water Break!',
+	'🌊 Stay Hydrated!',
+	'💦 Drink Up!'
+]
 
-const bodies = [
+const NOTIFICATION_BODIES = [
 	'Your body needs water to function properly.',
 	'Drinking water helps maintain focus and energy.',
 	'Time for a refreshing glass of water.',
 	'Stay hydrated to keep your mind sharp.'
 ]
 
-function createWindow(): void {
-	// Create the browser window.
-	const mainWindow = new BrowserWindow({
-		title: 'Hydration Tracker',
-		width: 400,
-		height: 560,
-		show: false,
-		resizable: false,
-		maximizable: false,
-		fullscreenable: false,
-		frame: false,
-		transparent: true,
-		autoHideMenuBar: true,
-		...(process.platform === 'linux' ? { icon } : {}),
-		webPreferences: {
-			preload: join(__dirname, '../preload/index.js'),
-			sandbox: false
-		}
-	})
+const NOTIFICATION_INTERVAL_MS = 3600000
 
-	mainWindow.on('ready-to-show', () => {
-		mainWindow.show()
-	})
+class HydrationTracker {
+	private mainWindow: BrowserWindow | null = null
+	private tray: Tray | null = null
 
-	mainWindow.webContents.setWindowOpenHandler((details) => {
-		shell.openExternal(details.url)
-		return { action: 'deny' }
-	})
+	constructor(private readonly iconPath: string) {}
 
-	// HMR for renderer base on electron-vite cli.
-	// Load the remote URL for development or the local html file for production.
-	if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
-		mainWindow.loadURL(process.env['ELECTRON_RENDERER_URL'])
-	} else {
-		mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
+	public createApp() {
+		this.createMainWindow()
+		this.createTray()
+		this.loadWindowContent()
+		this.setupWindowEvents()
+		this.setupIpcHandlers()
+		this.setupNotificationSystem()
 	}
 
-	ipcMain.on('hide-app', () => {
-		if (mainWindow) {
-			mainWindow.hide()
-		}
-	})
+	private createMainWindow() {
+		this.mainWindow = new BrowserWindow({
+			title: 'Hydration Tracker',
+			width: 400,
+			height: 560,
+			show: false,
+			resizable: false,
+			maximizable: false,
+			fullscreenable: false,
+			frame: false,
+			transparent: true,
+			autoHideMenuBar: true,
+			...(process.platform === 'linux' ? { icon: this.iconPath } : {}),
+			webPreferences: {
+				preload: join(__dirname, '../preload/index.js'),
+				sandbox: false
+			}
+		})
+	}
 
-	ipcMain.on('minimize-app', () => {
-		if (mainWindow) {
-			mainWindow.minimize()
-		}
-	})
+	private setupWindowEvents() {
+		this.mainWindow?.on('ready-to-show', () => {
+			this.mainWindow?.show()
+		})
 
-	function createTray() {
-		const tray = new Tray(icon)
+		this.mainWindow?.webContents.setWindowOpenHandler((details) => {
+			shell.openExternal(details.url)
+			return { action: 'deny' }
+		})
+	}
+
+	private loadWindowContent() {
+		if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
+			this.mainWindow?.loadURL(process.env['ELECTRON_RENDERER_URL'])
+		} else {
+			this.mainWindow?.loadFile(join(__dirname, '../renderer/index.html'))
+		}
+	}
+
+	private setupIpcHandlers() {
+		ipcMain.on('hide-app', () => this.mainWindow?.hide())
+		ipcMain.on('minimize-app', () => this.mainWindow?.minimize())
+	}
+
+	private toggleMainWindow() {
+		if (this.mainWindow?.isVisible()) {
+			this.mainWindow?.hide()
+		} else {
+			this.mainWindow?.show()
+			this.mainWindow?.focus()
+		}
+	}
+
+	private createTray() {
+		this.tray = new Tray(this.iconPath)
 
 		const menu = Menu.buildFromTemplate([
-			{ label: 'Show App', click: () => mainWindow.show() },
+			{ label: 'Show App', click: () => this.mainWindow?.show() },
 			{ label: 'Quit', click: () => app.quit() }
 		])
 
-		tray.setToolTip('Hydration Tracker')
-		tray.setContextMenu(menu)
+		this.tray.setToolTip('Hydration Tracker')
+		this.tray.setContextMenu(menu)
 
-		tray.on('click', toggleMainWindow)
+		this.tray.on('click', () => this.toggleMainWindow())
 	}
 
-	function toggleMainWindow() {
-		if (mainWindow.isVisible()) {
-			mainWindow.hide()
-		} else {
-			mainWindow.show()
-			mainWindow.focus()
-		}
-	}
-
-	function getRandomNotification() {
-		const randomTitle = titles[Math.floor(Math.random() * titles.length)]
-		const randomBody = bodies[Math.floor(Math.random() * bodies.length)]
+	private getRandomNotification() {
+		const randomTitle =
+			NOTIFICATION_TITLES[Math.floor(Math.random() * NOTIFICATION_TITLES.length)]
+		const randomBody =
+			NOTIFICATION_BODIES[Math.floor(Math.random() * NOTIFICATION_BODIES.length)]
 
 		return { title: randomTitle, body: randomBody }
 	}
 
-	function createNotification() {
-		const { title, body } = getRandomNotification()
+	private displayNotification() {
+		const { title, body } = this.getRandomNotification()
 
 		const notification = new Notification({
 			title,
 			body,
-			icon,
+			icon: this.iconPath,
 			silent: false
 		})
 
 		notification.on('click', () => {
-			if (mainWindow && !mainWindow.isVisible()) {
-				mainWindow.show()
-				mainWindow.focus()
+			if (!this.mainWindow?.isVisible()) {
+				this.mainWindow?.show()
+				this.mainWindow?.focus()
 			}
 		})
 
 		notification.show()
 	}
 
-	createTray()
-	setInterval(createNotification, 3600000)
+	private setupNotificationSystem() {
+		setInterval(() => this.displayNotification(), NOTIFICATION_INTERVAL_MS)
+	}
 }
 
-app.setName('Hydration Tracker')
+const initializeApp = () => {
+	app.setName('Hydration Tracker')
 
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
-app.whenReady().then(() => {
-	useConf()
+	app.whenReady().then(() => {
+		useConf()
 
-	// Set app user model id for windows
-	electronApp.setAppUserModelId('com.electron')
+		electronApp.setAppUserModelId('com.electron')
 
-	// Default open or close DevTools by F12 in development
-	// and ignore CommandOrControl + R in production.
-	// see https://github.com/alex8088/electron-toolkit/tree/master/packages/utils
-	app.on('browser-window-created', (_, window) => {
-		optimizer.watchWindowShortcuts(window)
+		app.on('browser-window-created', (_, window) => {
+			optimizer.watchWindowShortcuts(window)
+		})
+
+		const hydrationTracker = new HydrationTracker(icon)
+		hydrationTracker.createApp()
+
+		app.on('activate', () => {
+			if (BrowserWindow.getAllWindows().length === 0) {
+				hydrationTracker.createApp()
+			}
+		})
 	})
 
-	createWindow()
-
-	app.on('activate', function () {
-		// On macOS it's common to re-create a window in the app when the
-		// dock icon is clicked and there are no other windows open.
-		if (BrowserWindow.getAllWindows().length === 0) createWindow()
+	app.on('window-all-closed', () => {
+		if (process.platform !== 'darwin') {
+			app.hide()
+		}
 	})
-})
+}
 
-// Quit when all windows are closed, except on macOS. There, it's common
-// for applications and their menu bar to stay active until the user quits
-// explicitly with Cmd + Q.
-app.on('window-all-closed', () => {
-	if (process.platform !== 'darwin') {
-		app.hide()
-	}
-})
-
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and require them here.
+initializeApp()
