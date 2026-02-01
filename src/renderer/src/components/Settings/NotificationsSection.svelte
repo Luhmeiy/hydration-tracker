@@ -15,8 +15,8 @@
 	let silenceNotifications = $state(false)
 	let notificationInterval = $state(3600000)
 
-	const updateConf = (key: Settings['key'], value: Settings['value']): void => {
-		conf.set(key, value)
+	const updateConf = async (key: Settings['key'], value: Settings['value']): Promise<void> => {
+		await conf.set(key, value)
 	}
 
 	const changeNotificationInterval = (): void => {
@@ -49,15 +49,16 @@
 
 	<div class="flex flex-col gap-1 text-sm">
 		<ToggleSwitch
+			bind:value={removeNotifications}
 			action={() => updateConf('removeNotifications', removeNotifications)}
 			label="Remove notifications"
-			bind:value={removeNotifications}
 		/>
 
 		<ToggleSwitch
-			action={() => updateConf('silenceNotifications', silenceNotifications)}
-			label="Silence notifications"
 			bind:value={silenceNotifications}
+			action={() => updateConf('silenceNotifications', silenceNotifications)}
+			disabled={removeNotifications}
+			label="Silence notifications"
 		/>
 
 		<div class="flex flex-col items-center">
@@ -70,7 +71,8 @@
 					min="1"
 					step="10"
 					id="water-add"
-					class="w-20 border-3 rounded-[2px] px-1"
+					class="w-20 border-3 rounded-[2px] px-1 disabled:border-zinc-400 disabled:cursor-not-allowed"
+					disabled={removeNotifications}
 					bind:value={notificationInterval}
 					onchange={changeNotificationInterval}
 					onkeydown={(e) => e.code === 'Enter' && changeNotificationInterval()}
