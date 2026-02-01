@@ -3,7 +3,6 @@
 	import type { Preset } from '../interfaces/Preset'
 	import type { Unit } from '../interfaces/Unit'
 	import AddWaterSection from '../components/AddWaterSection.svelte'
-	import ErrorModal from '../components/ErrorModal.svelte'
 	import GoalDisplay from '../components/GoalDisplay.svelte'
 	import PresetSection from '../components/PresetSection.svelte'
 	import ToggleMode from '../components/ToggleMode.svelte'
@@ -12,12 +11,12 @@
 
 	const conf = new Conf()
 
+	let { errorMessage = $bindable() }: { errorMessage: string } = $props()
+
 	let unit = $state<Unit>('L')
 	let presets = $state<Preset[]>([])
 	let waterGoal = $state(2500)
 	let waterTotal = $state(0)
-
-	let errorMessage = $state('')
 
 	const addWater = async (value: number): Promise<void> => {
 		errorMessage = validateNumber(value)
@@ -49,8 +48,6 @@
 		getData()
 	})
 </script>
-
-<ErrorModal bind:errorMessage />
 
 <ToggleMode />
 

@@ -21,11 +21,12 @@ const NOTIFICATION_BODIES = [
 	'Stay hydrated to keep your mind sharp.'
 ]
 
-const NOTIFICATION_INTERVAL_MS = 3600000
+const DEFAULT_NOTIFICATION_INTERVAL_MS = 3600000
 
 class HydrationTracker {
 	private mainWindow: BrowserWindow | null = null
 	private tray: Tray | null = null
+	private notificationInterval: NodeJS.Timeout | null = null
 
 	constructor(private readonly iconPath: string) {}
 
@@ -36,6 +37,10 @@ class HydrationTracker {
 		this.setupWindowEvents()
 		this.setupIpcHandlers()
 		this.setupNotificationSystem()
+
+		conf.onDidChange('removeNotifications', () => this.setupNotificationSystem())
+		conf.onDidChange('silenceNotification', () => this.setupNotificationSystem())
+		conf.onDidChange('notificationInterval', () => this.setupNotificationSystem())
 	}
 
 	private createMainWindow() {
@@ -114,14 +119,14 @@ class HydrationTracker {
 		return { title: randomTitle, body: randomBody }
 	}
 
-	private displayNotification() {
+	private displayNotification(silent: boolean) {
 		const { title, body } = this.getRandomNotification()
 
 		const notification = new Notification({
 			title,
 			body,
 			icon: this.iconPath,
-			silent: false
+			silent
 		})
 
 		notification.on('click', () => {
@@ -135,7 +140,21 @@ class HydrationTracker {
 	}
 
 	private setupNotificationSystem() {
-		setInterval(() => this.displayNotification(), NOTIFICATION_INTERVAL_MS)
+		if (this.notificationInterval) {
+			clearInterval(this.notificationInterval)
+		}
+
+		const removeNotifications = (conf.get('removeNotifications') as boolean) || false
+		if (removeNotifications) return
+
+		const silenceNotifications = (conf.get('silenceNotifications') as boolean) || false
+		const notificationInterval =
+			(conf.get('notificationInterval') as number) || DEFAULT_NOTIFICATION_INTERVAL_MS
+
+		this.notificationInterval = setInterval(
+			() => this.displayNotification(silenceNotifications),
+			notificationInterval
+		)
 	}
 }
 
