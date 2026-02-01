@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Unit } from '../interfaces/Unit'
+	import type { Unit } from '$interfaces/Unit'
 
 	interface WaterDisplayProps {
 		unit: Unit

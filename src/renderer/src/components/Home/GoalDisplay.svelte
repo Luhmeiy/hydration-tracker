@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { Conf } from 'electron-conf/renderer'
-	import type { Unit } from '../interfaces/Unit'
+	import type { Unit } from '$interfaces/Unit'
 	import GoalSymbol from './GoalSymbol.svelte'
 	import InputSwitch from './InputSwitch.svelte'
-	import Modal from './Modal.svelte'
+	import Modal from '../Modal.svelte'
 	import WaterDisplay from './WaterDisplay.svelte'
-	import { validateNumber } from '../utils/validateNumber'
+	import { validateNumber } from '$utils/validateNumber'
 
 	const conf = new Conf()
 

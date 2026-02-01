@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { Conf } from 'electron-conf/renderer'
-	import type { Preset } from '../interfaces/Preset'
+	import type { Preset } from '$interfaces/Preset'
 	import Button from './Button.svelte'
-	import Modal from './Modal.svelte'
-	import { handleKeydown } from '../utils/handleKeydown'
-	import { validatePreset } from '../utils/validatePreset'
+	import Modal from '../Modal.svelte'
+	import { handleKeydown } from '$utils/handleKeydown'
+	import { validatePreset } from '$utils/validatePreset'
 
 	const conf = new Conf()
 

@@ -1,13 +1,13 @@
 <script lang="ts">
 	import { Conf } from 'electron-conf/renderer'
-	import type { Preset } from '../interfaces/Preset'
-	import type { Unit } from '../interfaces/Unit'
-	import AddWaterSection from '../components/AddWaterSection.svelte'
-	import GoalDisplay from '../components/GoalDisplay.svelte'
-	import PresetSection from '../components/PresetSection.svelte'
-	import ToggleMode from '../components/ToggleMode.svelte'
-	import UnitSelect from '../components/UnitSelect.svelte'
-	import { validateNumber } from '../utils/validateNumber'
+	import type { Preset } from '$interfaces/Preset'
+	import type { Unit } from '$interfaces/Unit'
+	import AddWaterSection from '$components/Home/AddWaterSection.svelte'
+	import GoalDisplay from '$components/Home/GoalDisplay.svelte'
+	import PresetSection from '$components/Home/PresetSection.svelte'
+	import ToggleMode from '$components/Home/ToggleMode.svelte'
+	import UnitSelect from '$components/Home/UnitSelect.svelte'
+	import { validateNumber } from '$utils/validateNumber'
 
 	const conf = new Conf()
 

@@ -1,9 +1,9 @@
 <script>
-	import ErrorModal from './components/ErrorModal.svelte'
-	import Header from './components/Header.svelte'
-	import SettingsButton from './components/SettingsButton.svelte'
-	import Home from './pages/Home.svelte'
-	import Settings from './pages/Settings.svelte'
+	import ErrorModal from '$components/ErrorModal.svelte'
+	import Header from '$components/Header.svelte'
+	import SettingsButton from '$components/SettingsButton.svelte'
+	import Home from '$pages/Home.svelte'
+	import Settings from '$pages/Settings.svelte'
 
 	let isSettings = $state(false)
 	let errorMessage = $state('')

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Preset } from '../interfaces/Preset'
+	import type { Preset } from '$interfaces/Preset'
 	import AddPreset from './AddPreset.svelte'
 	import Button from './Button.svelte'
 

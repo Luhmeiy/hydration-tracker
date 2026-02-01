@@ -12,6 +12,17 @@
     "strict": false,
     "allowJs": true,
     "checkJs": true,
-    "lib": ["ESNext", "DOM", "DOM.Iterable"]
+    "lib": ["ESNext", "DOM", "DOM.Iterable"],
+    "baseUrl": ".",
+		"paths": {
+			"$components": ["src/renderer/src/components"],
+      "$components/*": ["src/renderer/src/components/*"],
+			"$interfaces": ["src/renderer/src/interfaces"],
+			"$interfaces/*": ["src/renderer/src/interfaces/*"],
+			"$utils": ["src/renderer/src/utils"],
+			"$utils/*": ["src/renderer/src/utils/*"],
+			"$pages": ["src/renderer/src/pages"],
+			"$pages/*": ["src/renderer/src/pages/*"]
+		}
   }
 }

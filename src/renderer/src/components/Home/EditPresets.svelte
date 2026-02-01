@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { Conf } from 'electron-conf/renderer'
-	import type { Preset } from '../interfaces/Preset'
+	import type { Preset } from '$interfaces/Preset'
 	import InputSwitch from './InputSwitch.svelte'
-	import Modal from './Modal.svelte'
-	import { validatePreset } from '../utils/validatePreset'
+	import Modal from '../Modal.svelte'
+	import { validatePreset } from '$utils/validatePreset'
 
 	const conf = new Conf()
 

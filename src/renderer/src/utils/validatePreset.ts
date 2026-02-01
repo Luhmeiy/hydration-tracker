@@ -1,4 +1,4 @@
-import type { Preset } from './../interfaces/Preset'
+import type { Preset } from '$interfaces/Preset'
 
 export const validatePreset = (presets: Preset[], value: string | number): string | null => {
 	if (typeof value === 'number' && value < 0) {

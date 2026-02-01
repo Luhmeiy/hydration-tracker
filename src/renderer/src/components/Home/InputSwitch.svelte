@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte'
-	import { handleKeydown } from '../utils/handleKeydown'
+	import { handleKeydown } from '$utils/handleKeydown'
 
 	interface InputSwitchProps {
 		children: Snippet

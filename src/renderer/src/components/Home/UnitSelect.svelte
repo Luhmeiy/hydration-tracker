@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Conf } from 'electron-conf/renderer'
-	import type { Unit } from '../interfaces/Unit'
+	import type { Unit } from '$interfaces/Unit'
 
 	const conf = new Conf()
 
