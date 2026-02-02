@@ -9,7 +9,12 @@
 		value: boolean | number
 	}
 
-	let { errorMessage = $bindable() }: { errorMessage: string } = $props()
+	interface NotificationsSectionProps {
+		errorMessage: string
+		closeAppToTray: boolean
+	}
+
+	let { errorMessage = $bindable(), closeAppToTray }: NotificationsSectionProps = $props()
 
 	let removeNotifications = $state(false)
 	let silenceNotifications = $state(false)
@@ -51,13 +56,14 @@
 		<ToggleSwitch
 			bind:value={removeNotifications}
 			action={() => updateConf('removeNotifications', removeNotifications)}
+			disabled={!closeAppToTray}
 			label="Remove notifications"
 		/>
 
 		<ToggleSwitch
 			bind:value={silenceNotifications}
 			action={() => updateConf('silenceNotifications', silenceNotifications)}
-			disabled={removeNotifications}
+			disabled={removeNotifications || !closeAppToTray}
 			label="Silence notifications"
 		/>
 
@@ -72,7 +78,7 @@
 					step="10"
 					id="water-add"
 					class="w-20 border-3 rounded-[2px] px-1 disabled:border-zinc-400 disabled:cursor-not-allowed"
-					disabled={removeNotifications}
+					disabled={removeNotifications || !closeAppToTray}
 					bind:value={notificationInterval}
 					onchange={changeNotificationInterval}
 					onkeydown={(e) => e.code === 'Enter' && changeNotificationInterval()}

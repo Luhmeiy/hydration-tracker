@@ -1,9 +1,16 @@
 <script lang="ts">
 	import NotificationsSection from '$components/Settings/NotificationsSection.svelte'
+	import SystemSection from '$components/Settings/SystemSection.svelte'
 	import ThemesSection from '$components/Settings/ThemesSection.svelte'
 
-	let { errorMessage = $bindable() }: { errorMessage: string } = $props()
+	interface SettingsProps {
+		closeAppToTray: boolean
+		errorMessage: string
+	}
+
+	let { closeAppToTray = $bindable(), errorMessage = $bindable() }: SettingsProps = $props()
 </script>
 
-<NotificationsSection bind:errorMessage />
+<SystemSection bind:closeAppToTray />
+<NotificationsSection bind:errorMessage {closeAppToTray} />
 <ThemesSection />

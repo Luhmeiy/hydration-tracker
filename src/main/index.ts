@@ -83,6 +83,7 @@ class HydrationTracker {
 	}
 
 	private setupIpcHandlers() {
+		ipcMain.on('close-app', () => this.mainWindow?.close())
 		ipcMain.on('hide-app', () => this.mainWindow?.hide())
 		ipcMain.on('minimize-app', () => this.mainWindow?.minimize())
 	}
@@ -182,7 +183,13 @@ const initializeApp = () => {
 
 	app.on('window-all-closed', () => {
 		if (process.platform !== 'darwin') {
-			app.hide()
+			const closeAppToTray = conf.get('closeAppToTray')
+
+			if (closeAppToTray) {
+				app.hide()
+			} else {
+				app.quit()
+			}
 		}
 	})
 }

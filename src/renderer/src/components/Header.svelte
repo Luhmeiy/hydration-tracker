@@ -1,10 +1,16 @@
 <script lang="ts">
 	import HeaderButton from './HeaderButton.svelte'
 
-	let { isSettings }: { isSettings: boolean } = $props()
+	interface HeaderProps {
+		closeAppToTray: boolean
+		isSettings: boolean
+	}
 
-	const hideWindow = (): void => window.electronAPI.hideApp()
-	const minimizeWindow = (): void => window.electronAPI.minimizeApp()
+	let { closeAppToTray, isSettings }: HeaderProps = $props()
+
+	const closeWindow = (): void => window.api.closeApp()
+	const hideWindow = (): void => window.api.hideApp()
+	const minimizeWindow = (): void => window.api.minimizeApp()
 </script>
 
 <header class="flex">
@@ -20,7 +26,7 @@
 		/>
 		<HeaderButton
 			label="hide window"
-			action={hideWindow}
+			action={closeAppToTray ? hideWindow : closeWindow}
 			bgColor="bg-close hover:bg-close-hover active:bg-close-active"
 		/>
 	</div>
