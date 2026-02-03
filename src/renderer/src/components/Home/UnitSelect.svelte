@@ -10,7 +10,7 @@
 </script>
 
 <section class="flex flex-col gap-1 items-center">
-	<h2 class="font-bold">Display Unit</h2>
+	<h2 class="font-bold">Unit</h2>
 	<select
 		bind:value={unit}
 		onchange={changeUnit}

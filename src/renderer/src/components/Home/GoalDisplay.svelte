@@ -5,6 +5,7 @@
 	import InputSwitch from './InputSwitch.svelte'
 	import Modal from '../Modal.svelte'
 	import WaterDisplay from './WaterDisplay.svelte'
+	import { convertValueToMl } from '$utils/convertUnit'
 	import { validateNumber } from '$utils/validateNumber'
 
 	const conf = new Conf()
@@ -30,13 +31,15 @@
 		errorMessage = validateNumber(value)
 		if (errorMessage) return true
 
+		const convertedValue = convertValueToMl(value, unit)
+
 		switch (type) {
 			case 'total':
-				waterTotal = value
+				waterTotal = convertedValue
 				await conf.set('waterTotal', waterTotal)
 				break
 			case 'goal':
-				waterGoal = value
+				waterGoal = convertedValue
 				await conf.set('waterGoal', waterGoal)
 				break
 		}
@@ -57,11 +60,15 @@
 	<span class="flex items-center">
 		<GoalSymbol {isGoalAchieved} />
 		&nbsp
-		<InputSwitch value={waterTotal} action={(value: number) => saveWater('total', value)}>
+		<InputSwitch
+			{unit}
+			value={waterTotal}
+			action={(value: number) => saveWater('total', value)}
+		>
 			<WaterDisplay {unit} water={waterTotal} />
 		</InputSwitch>
 		&nbsp/&nbsp
-		<InputSwitch value={waterGoal} action={(value: number) => saveWater('goal', value)}>
+		<InputSwitch {unit} value={waterGoal} action={(value: number) => saveWater('goal', value)}>
 			<WaterDisplay {unit} water={waterGoal} />
 		</InputSwitch>
 		&nbsp

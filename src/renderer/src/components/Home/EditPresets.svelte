@@ -1,9 +1,11 @@
 <script lang="ts">
 	import { Conf } from 'electron-conf/renderer'
 	import type { Preset } from '$interfaces/Preset'
+	import type { Unit } from '$interfaces/Unit'
 	import InputSwitch from './InputSwitch.svelte'
 	import Modal from '../Modal.svelte'
 	import { validatePreset } from '$utils/validatePreset'
+	import { convertValueFromMl, convertValueToMl } from '$utils/convertUnit'
 
 	const conf = new Conf()
 
@@ -11,12 +13,14 @@
 		errorMessage: string | null
 		isEditPreset: boolean
 		presets: Preset[]
+		unit: Unit
 	}
 
 	let {
 		errorMessage = $bindable(),
 		isEditPreset = $bindable(),
-		presets = $bindable()
+		presets = $bindable(),
+		unit
 	}: EditPresetsProps = $props()
 
 	const editPreset = async (
@@ -29,7 +33,10 @@
 
 		presets = presets.map((preset) => {
 			if (preset.name === name) {
-				return { ...preset, [key]: value }
+				return {
+					...preset,
+					[key]: typeof value === 'number' ? convertValueToMl(value, unit) : value
+				}
 			}
 
 			return preset
@@ -57,6 +64,7 @@
 				<InputSwitch
 					action={(value: string | number) => editPreset('name', preset.name, value)}
 					value={preset.name}
+					{unit}
 					isText
 					isPreset
 				>
@@ -66,9 +74,10 @@
 				<InputSwitch
 					action={(value: string | number) => editPreset('value', preset.name, value)}
 					value={preset.value}
+					{unit}
 					isPreset
 				>
-					{preset.value || 'Empty'}
+					{+convertValueFromMl(preset.value, unit).toFixed(3) || 'Empty'}
 				</InputSwitch>
 
 				<button

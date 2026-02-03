@@ -1,19 +1,24 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte'
+	import type { Unit } from '$interfaces/Unit'
+	import { convertValueFromMl } from '$utils/convertUnit'
 	import { handleKeydown } from '$utils/handleKeydown'
 
 	interface InputSwitchProps {
 		children: Snippet
 		action: (value: string | number) => Promise<boolean>
+		unit: Unit
 		value: string | number
 		isPreset?: boolean
 		isText?: boolean
 	}
 
-	let { children, action, value, isPreset, isText }: InputSwitchProps = $props()
+	let { children, action, unit, value, isPreset, isText }: InputSwitchProps = $props()
 
 	let inputRef = $state<HTMLInputElement>()
-	let tempValue = $derived<string | number>(value)
+	let tempValue = $derived<string | number>(
+		typeof value === 'number' ? convertValueFromMl(value, unit) : value
+	)
 	let isEditing = $state(false)
 
 	$effect(() => {
@@ -26,7 +31,7 @@
 {#if isEditing}
 	<div class="flex gap-2 items-center">
 		{#if !isPreset}
-			<label for="water">(in mL):</label>
+			<label for="water">(in {unit}):</label>
 		{/if}
 
 		<input

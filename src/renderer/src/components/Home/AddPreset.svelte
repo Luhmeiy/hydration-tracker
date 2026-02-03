@@ -3,6 +3,8 @@
 	import type { Preset } from '$interfaces/Preset'
 	import Button from './Button.svelte'
 	import Modal from '../Modal.svelte'
+	import type { Unit } from '$interfaces/Unit'
+	import { convertValueToMl } from '$utils/convertUnit'
 	import { handleKeydown } from '$utils/handleKeydown'
 	import { validatePreset } from '$utils/validatePreset'
 
@@ -11,12 +13,14 @@
 	interface PresetFormProps {
 		errorMessage: string | null
 		presets: Preset[]
+		unit: Unit
 		waterToAdd: number
 	}
 
 	let {
 		errorMessage = $bindable(),
 		presets = $bindable(),
+		unit,
 		waterToAdd
 	}: PresetFormProps = $props()
 
@@ -44,7 +48,10 @@
 			return
 		}
 
-		presets = [...presets, { name: presetName.trim(), value: waterToAdd }]
+		presets = [
+			...presets,
+			{ name: presetName.trim(), value: convertValueToMl(waterToAdd, unit) }
+		]
 
 		await conf.set('presets', JSON.stringify(presets))
 

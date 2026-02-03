@@ -7,6 +7,7 @@
 	import PresetSection from '$components/Home/PresetSection.svelte'
 	import ToggleMode from '$components/Home/ToggleMode.svelte'
 	import UnitSelect from '$components/Home/UnitSelect.svelte'
+	import { convertValueToMl } from '$utils/convertUnit'
 	import { validateNumber } from '$utils/validateNumber'
 
 	const conf = new Conf()
@@ -18,11 +19,11 @@
 	let waterGoal = $state(2500)
 	let waterTotal = $state(0)
 
-	const addWater = async (value: number): Promise<void> => {
+	const addWater = async (value: number, isPreset?: boolean): Promise<void> => {
 		errorMessage = validateNumber(value)
 		if (errorMessage) return
 
-		waterTotal += value
+		waterTotal += isPreset ? value : convertValueToMl(value, unit)
 
 		await conf.set('waterTotal', waterTotal)
 	}
@@ -53,8 +54,8 @@
 
 <GoalDisplay bind:errorMessage bind:waterGoal bind:waterTotal {unit} />
 
-<PresetSection bind:errorMessage bind:presets {addWater} />
+<PresetSection bind:errorMessage bind:presets {addWater} {unit} />
 
-<AddWaterSection bind:errorMessage bind:presets {addWater} />
+<AddWaterSection bind:errorMessage bind:presets {addWater} {unit} />
 
 <UnitSelect bind:unit />

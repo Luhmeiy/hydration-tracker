@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { Unit } from '$interfaces/Unit'
+	import { convertValueFromMl } from '$utils/convertUnit'
 
 	interface WaterDisplayProps {
 		unit: Unit
@@ -8,18 +9,7 @@
 
 	let { unit, water }: WaterDisplayProps = $props()
 
-	let convertedWater = $derived(() => {
-		switch (unit) {
-			case 'L':
-				return water / 1000
-			case 'floz':
-				return water * 0.0338140227
-			case 'cup':
-				return water * 0.0042267528
-			default:
-				return water
-		}
-	})
+	let convertedWater = $derived(() => convertValueFromMl(water, unit))
 </script>
 
 {+convertedWater().toFixed(3)}

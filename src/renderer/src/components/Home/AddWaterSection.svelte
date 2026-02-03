@@ -1,18 +1,21 @@
 <script lang="ts">
 	import type { Preset } from '$interfaces/Preset'
+	import type { Unit } from '$interfaces/Unit'
 	import AddPreset from './AddPreset.svelte'
 	import Button from './Button.svelte'
 
 	interface PresetSectionProps {
-		addWater: (value: number) => Promise<void>
+		addWater: (value: number, isPreset?: boolean) => Promise<void>
 		errorMessage: string | null
 		presets: Preset[]
+		unit: Unit
 	}
 
 	let {
 		errorMessage = $bindable(),
 		presets = $bindable(),
-		addWater
+		addWater,
+		unit
 	}: PresetSectionProps = $props()
 
 	let waterToAdd = $state(0)
@@ -23,7 +26,7 @@
 
 	<div class="flex flex-col gap-1 items-center">
 		<div class="flex gap-2 items-center">
-			<label for="water-add">(in mL):</label>
+			<label for="water-add">(in {unit}):</label>
 			<input
 				type="number"
 				min="0"
@@ -37,8 +40,7 @@
 
 		<div class="flex gap-2">
 			<Button action={() => addWater(waterToAdd)} text="Drink" />
-
-			<AddPreset bind:presets bind:errorMessage {waterToAdd} />
+			<AddPreset bind:presets bind:errorMessage {waterToAdd} {unit} />
 		</div>
 	</div>
 </div>
