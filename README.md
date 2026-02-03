@@ -35,13 +35,13 @@ Check out the complete design on [Figma](https://www.figma.com/design/RyQPo0xTzM
 
 - **🎯 Customizable Goals** - Set your daily water intake target
 - **⚡ Custom Presets** - Save and use frequently consumed amounts
+- **🔔 Reminders** - Get notified to drink water
 - **🌓 Multiple Themes** - Light, dark, and darker mode support
 - **🔢 Flexible Units** - Switch between mL, L, fl oz and cups
 - **🔄 Daily Reset** - Automatically resets goals every day
 
 ## 🛠️ Planned Features
 
-- **🔔 Reminders** - Get notified to drink water
 - **🗓️ Calendar** - Track which days you achieved your daily intake target
 - **🎨 More Themes** - The more the merrier
 
