@@ -25,6 +25,7 @@ const DEFAULT_NOTIFICATION_INTERVAL_MS = 3600000
 
 class HydrationTracker {
 	private mainWindow: BrowserWindow | null = null
+	private secondaryWindow: BrowserWindow | null = null
 	private tray: Tray | null = null
 	private notificationInterval: NodeJS.Timeout | null = null
 
@@ -34,7 +35,7 @@ class HydrationTracker {
 		this.createMainWindow()
 		this.createTray()
 		this.loadWindowContent()
-		this.setupWindowEvents()
+		this.setupWindowEvents(this.mainWindow)
 		this.setupIpcHandlers()
 		this.setupNotificationSystem()
 
@@ -43,9 +44,9 @@ class HydrationTracker {
 		conf.onDidChange('notificationInterval', () => this.setupNotificationSystem())
 	}
 
-	private createMainWindow() {
-		this.mainWindow = new BrowserWindow({
-			title: 'Hydration Tracker',
+	private createWindow(title: string) {
+		return new BrowserWindow({
+			title,
 			width: 400,
 			height: 560,
 			show: false,
@@ -63,12 +64,27 @@ class HydrationTracker {
 		})
 	}
 
-	private setupWindowEvents() {
-		this.mainWindow?.on('ready-to-show', () => {
-			this.mainWindow?.show()
+	private createMainWindow() {
+		this.mainWindow = this.createWindow('Hydration Tracker')
+	}
+
+	private createSecondaryWindow() {
+		if (!this.secondaryWindow || this.secondaryWindow?.isDestroyed()) {
+			this.secondaryWindow = this.createWindow('Hydration Tracker - Calendar')
+
+			this.setupWindowEvents(this.secondaryWindow)
+			this.loadSecondaryWindowContent()
+		} else {
+			this.secondaryWindow.show()
+		}
+	}
+
+	private setupWindowEvents(window: BrowserWindow | null) {
+		window?.on('ready-to-show', () => {
+			window.show()
 		})
 
-		this.mainWindow?.webContents.setWindowOpenHandler((details) => {
+		window?.webContents.setWindowOpenHandler((details) => {
 			shell.openExternal(details.url)
 			return { action: 'deny' }
 		})
@@ -82,10 +98,25 @@ class HydrationTracker {
 		}
 	}
 
+	private loadSecondaryWindowContent() {
+		if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
+			const devUrl = new URL(process.env['ELECTRON_RENDERER_URL'])
+			devUrl.searchParams.set('mode', 'calendar')
+			this.secondaryWindow?.loadURL(devUrl.toString())
+		} else {
+			this.secondaryWindow?.loadFile(join(__dirname, '../renderer/index.html'), {
+				search: '?mode=calendar'
+			})
+		}
+	}
+
 	private setupIpcHandlers() {
 		ipcMain.on('close-app', () => this.mainWindow?.close())
 		ipcMain.on('hide-app', () => this.mainWindow?.hide())
 		ipcMain.on('minimize-app', () => this.mainWindow?.minimize())
+		ipcMain.on('open-calendar', () => this.createSecondaryWindow())
+		ipcMain.on('close-calendar', () => this.secondaryWindow?.close())
+		ipcMain.on('minimize-calendar', () => this.secondaryWindow?.minimize())
 	}
 
 	private toggleMainWindow() {

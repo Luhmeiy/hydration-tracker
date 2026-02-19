@@ -4,7 +4,10 @@ import { electronAPI } from '@electron-toolkit/preload'
 const api = {
 	closeApp: () => ipcRenderer.send('close-app'),
 	hideApp: () => ipcRenderer.send('hide-app'),
-	minimizeApp: () => ipcRenderer.send('minimize-app')
+	minimizeApp: () => ipcRenderer.send('minimize-app'),
+	openCalendar: () => ipcRenderer.send('open-calendar'),
+	closeCalendar: () => ipcRenderer.send('close-calendar'),
+	minimizeCalendar: () => ipcRenderer.send('minimize-calendar')
 }
 
 if (process.contextIsolated) {

@@ -7,6 +7,9 @@ declare global {
 			closeApp: () => void
 			hideApp: () => void
 			minimizeApp: () => void
+			openCalendar: () => void
+			closeCalendar: () => void
+			minimizeCalendar: () => void
 		}
 	}
 }

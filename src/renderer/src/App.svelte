@@ -1,41 +1,20 @@
 <script lang="ts">
-	import { Conf } from 'electron-conf/renderer'
-	import ErrorModal from '$components/ErrorModal.svelte'
-	import Header from '$components/Header.svelte'
-	import SettingsButton from '$components/SettingsButton.svelte'
-	import Home from '$pages/Home.svelte'
-	import Settings from '$pages/Settings.svelte'
+	import { onMount } from 'svelte'
+	import Calendar from './windows/Calendar.svelte'
+	import Main from './windows/Main.svelte'
 
-	const conf = new Conf()
+	let mode = $state()
 
-	let isSettings = $state(false)
-	let closeAppToTray = $state(true)
-	let errorMessage = $state('')
+	onMount(() => {
+		const url = new URL(window.location.href)
+		const queryParams = new URLSearchParams(url.search)
 
-	$effect(() => {
-		const getSystemSettings = async (): Promise<void> => {
-			closeAppToTray = ((await conf.get('closeAppToTray')) as boolean) ?? true
-		}
-
-		getSystemSettings()
+		mode = queryParams.get('mode') || 'main'
 	})
 </script>
 
-<div
-	class="bg-lightblue max-h-dvh flex flex-col gap-1 p-2 font-silkscreen border-3 border-darkblue rounded-lg text-darkblue overflow-x-hidden transition-colors duration-500 **:transition-colors **:duration-500"
->
-	<Header {closeAppToTray} {isSettings} />
-
-	<div
-		class="relative h-full bg-white flex flex-col items-center gap-4 px-2 py-6 border-3 border-darkblue rounded-b-lg overflow-y-auto dark:bg-zinc-800 darker:bg-zinc-950"
-	>
-		<ErrorModal bind:errorMessage />
-		<SettingsButton bind:isSettings />
-
-		{#if !isSettings}
-			<Home bind:errorMessage />
-		{:else}
-			<Settings bind:closeAppToTray bind:errorMessage />
-		{/if}
-	</div>
-</div>
+{#if mode === 'main'}
+	<Main />
+{:else}
+	<Calendar />
+{/if}
