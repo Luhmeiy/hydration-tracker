@@ -11,6 +11,7 @@
 	const conf = new Conf()
 
 	interface GoalDisplayProps {
+		saveToday: ({ waterTotal, waterGoal }: { waterTotal: number; waterGoal: number }) => void
 		errorMessage: string | null
 		unit: Unit
 		waterGoal: number
@@ -21,6 +22,7 @@
 		errorMessage = $bindable(),
 		waterGoal = $bindable(),
 		waterTotal = $bindable(),
+		saveToday,
 		unit
 	}: GoalDisplayProps = $props()
 
@@ -44,6 +46,7 @@
 				break
 		}
 
+		await saveToday({ waterGoal, waterTotal })
 		return false
 	}
 </script>

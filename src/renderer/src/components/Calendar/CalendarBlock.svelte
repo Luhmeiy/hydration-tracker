@@ -1,10 +1,14 @@
 <script lang="ts">
+	import type { CalendarEntry } from '$interfaces/Calendar'
+
 	interface CalendarBlockProps {
-		isAchieved?: boolean
+		day?: CalendarEntry
 		isDisabled?: boolean
 	}
 
-	let { isAchieved, isDisabled }: CalendarBlockProps = $props()
+	let { day, isDisabled }: CalendarBlockProps = $props()
+
+	let isAchieved = day?.isAchieved || false
 </script>
 
 <div

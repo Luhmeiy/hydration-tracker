@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { Conf } from 'electron-conf/renderer'
+	import type { Calendar } from '$interfaces/Calendar'
 	import type { Preset } from '$interfaces/Preset'
 	import type { Unit } from '$interfaces/Unit'
 	import AddWaterSection from '$components/Home/AddWaterSection.svelte'
@@ -18,6 +19,7 @@
 	let presets = $state<Preset[]>([])
 	let waterGoal = $state(2500)
 	let waterTotal = $state(0)
+	let calendar = $state<Calendar>()
 
 	const addWater = async (value: number, isPreset?: boolean): Promise<void> => {
 		errorMessage = validateNumber(value)
@@ -26,6 +28,32 @@
 		waterTotal += isPreset ? value : convertValueToMl(value, unit)
 
 		await conf.set('waterTotal', waterTotal)
+		await saveToday({ waterGoal, waterTotal })
+	}
+
+	const saveToday = async ({
+		waterGoal,
+		waterTotal
+	}: {
+		waterGoal: number
+		waterTotal: number
+	}): Promise<void> => {
+		const today = new Date()
+
+		const year = today.getFullYear()
+		const month = today.toLocaleDateString('en', { month: '2-digit' })
+		const day = today.getDate()
+
+		const todayKey = `${year}-${month}-${day}`
+
+		const newEntry = {
+			waterGoal,
+			waterTotal,
+			isAchieved: waterTotal >= waterGoal
+		}
+
+		calendar = { ...calendar, [todayKey]: newEntry }
+		await conf.set('calendar', JSON.stringify(calendar))
 	}
 
 	$effect(() => {
@@ -33,6 +61,7 @@
 			unit = ((await conf.get('unit')) as Unit) || 'L'
 			presets = JSON.parse((await conf.get('presets')) as string) || []
 			waterGoal = ((await conf.get('waterGoal')) as number) || 2500
+			calendar = JSON.parse((await conf.get('calendar')) as string) || null
 
 			const date = new Date((await conf.get('date')) as string)
 			const today = new Date()
@@ -52,7 +81,7 @@
 
 <ToggleMode />
 
-<GoalDisplay bind:errorMessage bind:waterGoal bind:waterTotal {unit} />
+<GoalDisplay bind:errorMessage bind:waterGoal bind:waterTotal {saveToday} {unit} />
 
 <PresetSection bind:errorMessage bind:presets {addWater} {unit} />
 
