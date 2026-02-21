@@ -1,30 +1,53 @@
 <script lang="ts">
 	import { Conf } from 'electron-conf/renderer'
-	import type { Calendar } from '$interfaces/Calendar'
+	import type { Calendar, CalendarEntry } from '$interfaces/Calendar'
 	import type { Mode } from '$interfaces/Mode'
+	import type { Unit } from '$interfaces/Unit'
 	import CalendarBlock from '$components/Calendar/CalendarBlock.svelte'
 	import Header from '$components/Header.svelte'
 
 	const conf = new Conf()
 	const today = new Date()
 
+	interface CalendarDays {
+		date: string
+		entry: CalendarEntry | null
+	}
+
 	const weekdays = ['S', 'M', 'T', 'W', 'T', 'F', 'S']
 	const totalCells = 35
 
 	let calendar = $state<Calendar>()
+	let calendarDays = $state<CalendarDays[]>()
+	let unit = $state<Unit>()
 
 	let year = $state(today.toLocaleString('en', { year: 'numeric' }))
 	let month = $state(today.toLocaleString('en', { month: '2-digit' }))
 	let fullMonth = $state(today.toLocaleString('en', { month: 'long' }))
 
-	let firstMonthDay = new Date(today.getFullYear(), today.getMonth(), 1).getDay()
-	let lastMonthDay = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate()
+	let firstMonthDay = new Date(+year, +month - 1, 1).getDay()
+	let lastMonthDay = new Date(+year, +month, 0).getDate()
 	let trailingEmpty = totalCells - lastMonthDay - firstMonthDay
+
+	const formatDate = (year: string, month: string, day: number): string => {
+		return `${year}-${month}-${day.toString().padStart(2, '0')}`
+	}
 
 	$effect(() => {
 		const getData = async (): Promise<void> => {
 			const mode = ((await conf.get('mode')) as Mode) || 'light'
 			calendar = JSON.parse((await conf.get('calendar')) as string) || null
+			unit = ((await conf.get('unit')) as Unit) || 'L'
+
+			calendarDays = Array.from({ length: lastMonthDay }, (_, index) => {
+				const day = index + 1
+				const date = formatDate(year, month, day)
+
+				return {
+					date,
+					entry: calendar[date] || null
+				}
+			})
 
 			if (mode) {
 				document.documentElement.classList.add(mode)
@@ -52,15 +75,15 @@
 				{/each}
 
 				{#each { length: firstMonthDay }}
-					<CalendarBlock isDisabled />
+					<CalendarBlock isDisabled {unit} />
 				{/each}
 
-				{#each { length: lastMonthDay }, index}
-					<CalendarBlock day={calendar[`${year}-${month}-${index + 1}`] || null} />
+				{#each calendarDays as { date, entry } (date)}
+					<CalendarBlock day={entry} {date} {unit} />
 				{/each}
 
 				{#each { length: trailingEmpty }}
-					<CalendarBlock isDisabled />
+					<CalendarBlock isDisabled {unit} />
 				{/each}
 			</div>
 		{/if}

@@ -23,6 +23,7 @@
 	"dependencies": {
 		"@electron-toolkit/preload": "^3.0.2",
 		"@electron-toolkit/utils": "^4.0.0",
+		"@floating-ui/dom": "^1.7.5",
 		"@tailwindcss/vite": "^4.1.18",
 		"electron-conf": "^1.3.0",
 		"electron-updater": "^6.3.9",
