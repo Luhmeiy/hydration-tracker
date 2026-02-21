@@ -6,15 +6,15 @@
 	import WaterDisplay from '$components/Home/WaterDisplay.svelte'
 
 	interface CalendarBlockProps {
+		date: string
+		entry: CalendarEntry | null
 		unit: Unit
-		date?: string
-		day?: CalendarEntry
 		isDisabled?: boolean
 	}
 
-	let { day, date, isDisabled, unit }: CalendarBlockProps = $props()
+	let { entry, date, isDisabled, unit }: CalendarBlockProps = $props()
 
-	let isAchieved = $derived(day?.isAchieved || false)
+	let isAchieved = $derived(entry?.isAchieved || false)
 	let formattedDate = $derived(new Date(date + 'T00:00:00').toLocaleDateString())
 
 	let displayTooltip = $state(false)
@@ -59,18 +59,18 @@
 			{formattedDate}
 		</p>
 
-		{#if day}
+		{#if entry}
 			<p>
-				<WaterDisplay {unit} water={day.waterTotal} />
+				<WaterDisplay {unit} water={entry.waterTotal} />
 				/
-				<WaterDisplay {unit} water={day.waterGoal} />
+				<WaterDisplay {unit} water={entry.waterGoal} />
 			</p>
 
-			{#if day.isAchieved}
+			{#if entry.isAchieved}
 				<p>
-					<GoalSymbol isGoalAchieved={day.isAchieved} />
+					<GoalSymbol isGoalAchieved={entry.isAchieved} />
 					Goal achieved
-					<GoalSymbol isGoalAchieved={day.isAchieved} />
+					<GoalSymbol isGoalAchieved={entry.isAchieved} />
 				</p>
 			{/if}
 		{:else}

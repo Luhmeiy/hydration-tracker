@@ -15,22 +15,50 @@
 	}
 
 	const weekdays = ['S', 'M', 'T', 'W', 'T', 'F', 'S']
-	const totalCells = 35
 
 	let calendar = $state<Calendar>()
-	let calendarDays = $state<CalendarDays[]>()
 	let unit = $state<Unit>()
 
-	let year = $state(today.toLocaleString('en', { year: 'numeric' }))
-	let month = $state(today.toLocaleString('en', { month: '2-digit' }))
+	let year = $state(+today.getFullYear())
+	let month = $state(+today.getMonth() + 1)
 	let fullMonth = $state(today.toLocaleString('en', { month: 'long' }))
 
-	let firstMonthDay = new Date(+year, +month - 1, 1).getDay()
-	let lastMonthDay = new Date(+year, +month, 0).getDate()
-	let trailingEmpty = totalCells - lastMonthDay - firstMonthDay
+	let firstMonthDay = $derived(new Date(year, month - 1, 1).getDay())
+	let lastMonthDay = $derived(new Date(year, month, 0).getDate())
 
-	const formatDate = (year: string, month: string, day: number): string => {
-		return `${year}-${month}-${day.toString().padStart(2, '0')}`
+	let totalCells = $derived(firstMonthDay + lastMonthDay > 35 ? 42 : 35)
+	let trailingEmpty = $derived(totalCells - lastMonthDay - firstMonthDay)
+
+	let calendarDays = $derived<CalendarDays[]>(
+		Array.from({ length: lastMonthDay }, (_, index) => createDay(year, month, index + 1))
+	)
+
+	let previousMonthDays = $derived<() => CalendarDays[]>(() => {
+		const prevYear = month - 1 === 0 ? year - 1 : year
+		const prevMonth = month - 1 === 0 ? 12 : month - 1
+
+		return Array.from({ length: firstMonthDay }, (_, index) => {
+			const day = new Date(year, month - 1, 0).getDate() - index
+			return createDay(prevYear, prevMonth, day)
+		}).reverse()
+	})
+
+	let nextMonthDays = $derived<() => CalendarDays[]>(() => {
+		const nextYear = month + 1 === 13 ? year + 1 : year
+		const nextMonth = month + 1 === 13 ? 1 : month + 1
+
+		return Array.from({ length: trailingEmpty }, (_, index) => {
+			return createDay(nextYear, nextMonth, index + 1)
+		})
+	})
+
+	const createDay = (year: number, month: number, day: number): CalendarDays => {
+		const date = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`
+
+		return {
+			date,
+			entry: calendar[date] || null
+		}
 	}
 
 	$effect(() => {
@@ -38,16 +66,6 @@
 			const mode = ((await conf.get('mode')) as Mode) || 'light'
 			calendar = JSON.parse((await conf.get('calendar')) as string) || null
 			unit = ((await conf.get('unit')) as Unit) || 'L'
-
-			calendarDays = Array.from({ length: lastMonthDay }, (_, index) => {
-				const day = index + 1
-				const date = formatDate(year, month, day)
-
-				return {
-					date,
-					entry: calendar[date] || null
-				}
-			})
 
 			if (mode) {
 				document.documentElement.classList.add(mode)
@@ -74,16 +92,16 @@
 					<p class="text-center">{weekday}</p>
 				{/each}
 
-				{#each { length: firstMonthDay }}
-					<CalendarBlock isDisabled {unit} />
+				{#each previousMonthDays() as { date, entry } (date)}
+					<CalendarBlock isDisabled {entry} {date} {unit} />
 				{/each}
 
 				{#each calendarDays as { date, entry } (date)}
-					<CalendarBlock day={entry} {date} {unit} />
+					<CalendarBlock {entry} {date} {unit} />
 				{/each}
 
-				{#each { length: trailingEmpty }}
-					<CalendarBlock isDisabled {unit} />
+				{#each nextMonthDays() as { date, entry } (date)}
+					<CalendarBlock isDisabled {entry} {date} {unit} />
 				{/each}
 			</div>
 		{/if}
