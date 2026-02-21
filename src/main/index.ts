@@ -39,6 +39,11 @@ class HydrationTracker {
 		this.setupIpcHandlers()
 		this.setupNotificationSystem()
 
+		conf.onDidAnyChange(() => {
+			BrowserWindow.getAllWindows().forEach((win) => {
+				win.webContents.send('config-changed')
+			})
+		})
 		conf.onDidChange('removeNotifications', () => this.setupNotificationSystem())
 		conf.onDidChange('silenceNotification', () => this.setupNotificationSystem())
 		conf.onDidChange('notificationInterval', () => this.setupNotificationSystem())

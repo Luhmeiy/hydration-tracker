@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { Conf } from 'electron-conf/renderer'
+	import { onDestroy, onMount } from 'svelte'
 	import type { Calendar, CalendarEntry } from '$interfaces/Calendar'
 	import type { Mode } from '$interfaces/Mode'
 	import type { Unit } from '$interfaces/Unit'
@@ -17,6 +18,7 @@
 	const weekdays = ['S', 'M', 'T', 'W', 'T', 'F', 'S']
 
 	let calendar = $state<Calendar>()
+	let mode = $state<Mode>()
 	let unit = $state<Unit>()
 
 	let year = $state(+today.getFullYear())
@@ -61,18 +63,23 @@
 		}
 	}
 
+	onMount(async () => {
+		mode = ((await conf.get('mode')) as Mode) || 'light'
+		calendar = JSON.parse((await conf.get('calendar')) as string) || null
+		unit = ((await conf.get('unit')) as Unit) || 'L'
+
+		const unsubscribe = window.api.onConfigChange(async () => {
+			mode = (await conf.get('mode')) as Mode
+			calendar = JSON.parse((await conf.get('calendar')) as string)
+			unit = (await conf.get('unit')) as Unit
+		})
+
+		onDestroy(unsubscribe)
+	})
+
 	$effect(() => {
-		const getData = async (): Promise<void> => {
-			const mode = ((await conf.get('mode')) as Mode) || 'light'
-			calendar = JSON.parse((await conf.get('calendar')) as string) || null
-			unit = ((await conf.get('unit')) as Unit) || 'L'
-
-			if (mode) {
-				document.documentElement.classList.add(mode)
-			}
-		}
-
-		getData()
+		document.documentElement.className = ''
+		document.documentElement.classList.add(mode)
 	})
 </script>
 

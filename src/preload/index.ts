@@ -7,7 +7,11 @@ const api = {
 	minimizeApp: () => ipcRenderer.send('minimize-app'),
 	openCalendar: () => ipcRenderer.send('open-calendar'),
 	closeCalendar: () => ipcRenderer.send('close-calendar'),
-	minimizeCalendar: () => ipcRenderer.send('minimize-calendar')
+	minimizeCalendar: () => ipcRenderer.send('minimize-calendar'),
+	onConfigChange: (update: () => void) => {
+		ipcRenderer.on('config-changed', update)
+		return () => ipcRenderer.off('config-changed', update)
+	}
 }
 
 if (process.contextIsolated) {

@@ -10,6 +10,7 @@ declare global {
 			openCalendar: () => void
 			closeCalendar: () => void
 			minimizeCalendar: () => void
+			onConfigChange: (update: () => void) => () => void
 		}
 	}
 }
