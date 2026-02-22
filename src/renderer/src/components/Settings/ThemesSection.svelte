@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { Conf } from 'electron-conf/renderer'
+	import { onMount } from 'svelte'
 	import type { Mode } from '$interfaces/Mode'
 	import ToggleSwitch from './ToggleSwitch.svelte'
 	import { DEFAULT_MODES } from '$utils/defaultModes'
@@ -24,12 +25,8 @@
 		await conf.set('selectedModes', JSON.stringify(selectedModes))
 	}
 
-	$effect(() => {
-		const getSelectedTheme = async (): Promise<void> => {
-			selectedModes = JSON.parse((await conf.get('selectedModes')) as string) || DEFAULT_MODES
-		}
-
-		getSelectedTheme()
+	onMount(async () => {
+		selectedModes = JSON.parse((await conf.get('selectedModes')) as string) || DEFAULT_MODES
 	})
 </script>
 

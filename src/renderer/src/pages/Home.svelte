@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { Conf } from 'electron-conf/renderer'
+	import { onMount } from 'svelte'
 	import type { Calendar } from '$interfaces/Calendar'
 	import type { Preset } from '$interfaces/Preset'
 	import type { Unit } from '$interfaces/Unit'
@@ -56,26 +57,22 @@
 		await conf.set('calendar', JSON.stringify(calendar))
 	}
 
-	$effect(() => {
-		const getData = async (): Promise<void> => {
-			unit = ((await conf.get('unit')) as Unit) || 'L'
-			presets = JSON.parse((await conf.get('presets')) as string) || []
-			waterGoal = ((await conf.get('waterGoal')) as number) || 2500
-			calendar = JSON.parse((await conf.get('calendar')) as string) || null
+	onMount(async () => {
+		unit = ((await conf.get('unit')) as Unit) || 'L'
+		presets = JSON.parse((await conf.get('presets')) as string) || []
+		waterGoal = ((await conf.get('waterGoal')) as number) || 2500
+		calendar = JSON.parse((await conf.get('calendar')) as string) || null
 
-			const date = new Date((await conf.get('date')) as string)
-			const today = new Date()
-			const isToday = date.toDateString() === today.toDateString()
+		const date = new Date((await conf.get('date')) as string)
+		const today = new Date()
+		const isToday = date.toDateString() === today.toDateString()
 
-			if (isToday) {
-				waterTotal = ((await conf.get('waterTotal')) as number) || 0
-			} else {
-				await conf.set('date', today)
-				await conf.set('waterTotal', 0)
-			}
+		if (isToday) {
+			waterTotal = ((await conf.get('waterTotal')) as number) || 0
+		} else {
+			await conf.set('date', today)
+			await conf.set('waterTotal', 0)
 		}
-
-		getData()
 	})
 </script>
 

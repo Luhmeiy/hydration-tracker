@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { Conf } from 'electron-conf/renderer'
+	import { onMount } from 'svelte'
 	import type { Mode } from '$interfaces/Mode'
 	import { DEFAULT_MODES, DEFAULT_MODE_SYMBOLS } from '$utils/defaultModes'
 
@@ -26,17 +27,11 @@
 		await conf.set('mode', mode)
 	}
 
-	$effect(() => {
-		const getTheme = async (): Promise<void> => {
-			mode = ((await conf.get('mode')) as Mode) || 'light'
-			selectedModes = JSON.parse((await conf.get('selectedModes')) as string) || DEFAULT_MODES
+	onMount(async () => {
+		mode = ((await conf.get('mode')) as Mode) || 'light'
+		selectedModes = JSON.parse((await conf.get('selectedModes')) as string) || DEFAULT_MODES
 
-			if (mode) {
-				document.documentElement.classList.add(mode)
-			}
-		}
-
-		getTheme()
+		document.documentElement.classList.add(mode)
 	})
 </script>
 

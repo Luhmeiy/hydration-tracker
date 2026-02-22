@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { Conf } from 'electron-conf/renderer'
+	import { onMount } from 'svelte'
 	import ToggleSwitch from './ToggleSwitch.svelte'
 
 	const conf = new Conf()
@@ -34,18 +35,14 @@
 		updateConf('notificationInterval', minutesToMilliseconds)
 	}
 
-	$effect(() => {
-		const getNotificationSettings = async (): Promise<void> => {
-			removeNotifications = ((await conf.get('removeNotifications')) as boolean) || false
-			silenceNotifications = ((await conf.get('silenceNotifications')) as boolean) || false
+	onMount(async () => {
+		removeNotifications = ((await conf.get('removeNotifications')) as boolean) || false
+		silenceNotifications = ((await conf.get('silenceNotifications')) as boolean) || false
 
-			const storedNotificationInterval =
-				((await conf.get('notificationInterval')) as number) || 3600000
+		const storedNotificationInterval =
+			((await conf.get('notificationInterval')) as number) || 3600000
 
-			notificationInterval = storedNotificationInterval / 60 / 1000
-		}
-
-		getNotificationSettings()
+		notificationInterval = storedNotificationInterval / 60 / 1000
 	})
 </script>
 

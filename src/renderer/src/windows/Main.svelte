@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { Conf } from 'electron-conf/renderer'
+	import { onMount } from 'svelte'
 	import CalendarButton from '$components/CalendarButton.svelte'
 	import ErrorModal from '$components/ErrorModal.svelte'
 	import Header from '$components/Header.svelte'
@@ -13,12 +14,8 @@
 	let closeAppToTray = $state(true)
 	let errorMessage = $state('')
 
-	$effect(() => {
-		const getSystemSettings = async (): Promise<void> => {
-			closeAppToTray = ((await conf.get('closeAppToTray')) as boolean) ?? true
-		}
-
-		getSystemSettings()
+	onMount(async () => {
+		closeAppToTray = ((await conf.get('closeAppToTray')) as boolean) ?? true
 	})
 </script>
 
