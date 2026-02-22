@@ -28,11 +28,13 @@ class HydrationTracker {
 	private secondaryWindow: BrowserWindow | null = null
 	private tray: Tray | null = null
 	private notificationInterval: NodeJS.Timeout | null = null
+	private isCalendarOpen = false
 
 	constructor(private readonly iconPath: string) {}
 
 	public createApp() {
 		this.createMainWindow()
+		this.createSecondaryWindow()
 		this.createTray()
 		this.loadWindowContent()
 		this.setupWindowEvents(this.mainWindow)
@@ -86,7 +88,9 @@ class HydrationTracker {
 
 	private setupWindowEvents(window: BrowserWindow | null) {
 		window?.on('ready-to-show', () => {
-			window.show()
+			if (window === this.mainWindow) {
+				window.show()
+			}
 		})
 
 		window?.webContents.setWindowOpenHandler((details) => {
@@ -116,20 +120,42 @@ class HydrationTracker {
 	}
 
 	private setupIpcHandlers() {
-		ipcMain.on('close-app', () => this.mainWindow?.close())
+		ipcMain.on('close-app', () => {
+			this.mainWindow?.close()
+			this.secondaryWindow?.close()
+		})
 		ipcMain.on('hide-app', () => this.mainWindow?.hide())
 		ipcMain.on('minimize-app', () => this.mainWindow?.minimize())
-		ipcMain.on('open-calendar', () => this.createSecondaryWindow())
-		ipcMain.on('close-calendar', () => this.secondaryWindow?.close())
+		ipcMain.on('toggle-calendar', () => this.toggleSecondaryWindow())
+		ipcMain.on('close-calendar', () => {
+			this.isCalendarOpen = false
+			this.secondaryWindow?.hide()
+		})
 		ipcMain.on('minimize-calendar', () => this.secondaryWindow?.minimize())
 	}
 
 	private toggleMainWindow() {
 		if (this.mainWindow?.isVisible()) {
 			this.mainWindow?.hide()
+			this.secondaryWindow?.hide()
 		} else {
+			if (this.isCalendarOpen) {
+				this.secondaryWindow?.show()
+			}
+
 			this.mainWindow?.show()
 			this.mainWindow?.focus()
+		}
+	}
+
+	private toggleSecondaryWindow() {
+		if (this.secondaryWindow?.isVisible()) {
+			this.isCalendarOpen = false
+			this.secondaryWindow?.hide()
+		} else {
+			this.isCalendarOpen = true
+			this.secondaryWindow?.show()
+			this.secondaryWindow?.focus()
 		}
 	}
 
@@ -138,6 +164,13 @@ class HydrationTracker {
 
 		const menu = Menu.buildFromTemplate([
 			{ label: 'Show App', click: () => this.mainWindow?.show() },
+			{
+				label: 'Show Calendar',
+				click: () => {
+					this.isCalendarOpen = true
+					this.secondaryWindow?.show()
+				}
+			},
 			{ label: 'Quit', click: () => app.quit() }
 		])
 
