@@ -37,7 +37,7 @@
 
 	{#if presets.length > 0}
 		<button
-			class="underline cursor-pointer hover:text-darkblue-hover active:text-darkblue-active"
+			class="underline cursor-pointer hover:text-foreground-hover active:text-foreground-active"
 			onclick={() => (isEditPreset = true)}
 		>
 			Edit presets

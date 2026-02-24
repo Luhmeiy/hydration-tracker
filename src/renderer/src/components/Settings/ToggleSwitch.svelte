@@ -13,6 +13,6 @@
 	<span>{label}</span>
 	<input type="checkbox" class="sr-only peer" bind:checked={value} onchange={action} {disabled} />
 	<div
-		class="relative w-9 h-5 bg-zinc-500 rounded-full peer after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-transform dark:bg-zinc-600 darker:bg-zinc-700 dark:after:bg-zinc-800 darker:after:bg-zinc-950 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:bg-darkblue peer-checked:peer-disabled:bg-zinc-400 peer-disabled:cursor-not-allowed"
+		class="relative w-9 h-5 bg-zinc-500 rounded-full peer after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-transform dark:bg-zinc-600 darker:bg-zinc-700 dark:after:bg-zinc-800 darker:after:bg-zinc-950 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:bg-foreground peer-checked:peer-disabled:bg-zinc-400 peer-disabled:cursor-not-allowed"
 	></div>
 </label>

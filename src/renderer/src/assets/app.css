@@ -3,14 +3,18 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 @custom-variant darker (&:where(.darker, .darker *));
+@custom-variant strawberry (&:where(.strawberry, .strawberry *));
+@custom-variant grapes (&:where(.grapes, .grapes *));
+@custom-variant green-apple (&:where(.green-apple, .green-apple *));
+@custom-variant sunflower (&:where(.sunflower, .sunflower *));
 
 @theme {
-	--color-darkblue: #1b7fde;
-	--color-darkblue-hover: #0e3f6f;
-	--color-darkblue-active: #3992e7;
-	--color-lightblue: #bde0fe;
-	--color-lightblue-hover: #deeffe;
-	--color-lightblue-active: #91cbfd;
+	--color-foreground: #1b7fde;
+	--color-foreground-hover: #0e3f6f;
+	--color-foreground-active: #3992e7;
+	--color-background: #bde0fe;
+	--color-background-hover: #deeffe;
+	--color-background-active: #91cbfd;
 	--color-close: #ffb3d0;
 	--color-close-hover: #ff72a8;
 	--color-close-active: #ffbed7;
@@ -24,12 +28,12 @@
 :root,
 :host {
 	@variant dark {
-		--color-darkblue: #4d9eff;
-		--color-darkblue-hover: #b8d8ff;
-		--color-darkblue-active: #3992e7;
-		--color-lightblue: #1e3855;
-		--color-lightblue-hover: #0f1c2a;
-		--color-lightblue-active: #284b72;
+		--color-foreground: #4d9eff;
+		--color-foreground-hover: #b8d8ff;
+		--color-foreground-active: #3992e7;
+		--color-background: #1e3855;
+		--color-background-hover: #0f1c2a;
+		--color-background-active: #284b72;
 		--color-close: #ff4081;
 		--color-close-hover: #d70049;
 		--color-close-active: #ff669a;
@@ -39,17 +43,77 @@
 	}
 
 	@variant darker {
-		--color-darkblue: #0073ff;
-		--color-darkblue-hover: #80b9ff;
-		--color-darkblue-active: #3992e7;
-		--color-lightblue: #192f48;
-		--color-lightblue-hover: #0c1724;
-		--color-lightblue-active: #244367;
+		--color-foreground: #0073ff;
+		--color-foreground-hover: #80b9ff;
+		--color-foreground-active: #3992e7;
+		--color-background: #192f48;
+		--color-background-hover: #0c1724;
+		--color-background-active: #244367;
 		--color-close: #ff4081;
 		--color-close-hover: #d70049;
 		--color-close-active: #ff669a;
 		--color-minimize: #ffb74d;
 		--color-minimize-hover: #e08500;
 		--color-minimize-active: #ffcd82;
+	}
+
+	@variant strawberry {
+		--color-foreground: #c62828;
+		--color-foreground-hover: #8b0000;
+		--color-foreground-active: #e53935;
+		--color-background: #ffcdd2;
+		--color-background-hover: #ffebee;
+		--color-background-active: #ef9a9a;
+		--color-close: #ff80ab;
+		--color-close-hover: #ff4081;
+		--color-close-active: #ffb6c1;
+		--color-minimize: #9ccc65;
+		--color-minimize-hover: #7cb342;
+		--color-minimize-active: #c5e1a5;
+	}
+
+	@variant grapes {
+		--color-foreground: #6a1b9a;
+		--color-foreground-hover: #4a0072;
+		--color-foreground-active: #8e24aa;
+		--color-background: #e1bee7;
+		--color-background-hover: #f3e5f5;
+		--color-background-active: #ce93d8;
+		--color-close: #f06292;
+		--color-close-hover: #ec407a;
+		--color-close-active: #f8bbd0;
+		--color-minimize: #9ccc65;
+		--color-minimize-hover: #7cb342;
+		--color-minimize-active: #c5e1a5;
+	}
+
+	@variant green-apple {
+		--color-foreground: #2e7d32;
+		--color-foreground-hover: #1b5e20;
+		--color-foreground-active: #388e3c;
+		--color-background: #c8e6c9;
+		--color-background-hover: #e8f5e9;
+		--color-background-active: #a5d6a7;
+		--color-close: #f44336;
+		--color-close-hover: #d32f2f;
+		--color-close-active: #ffcdd2;
+		--color-minimize: #ffd54f;
+		--color-minimize-hover: #ffb300;
+		--color-minimize-active: #ffecb3;
+	}
+
+	@variant sunflower {
+		--color-foreground: #5d4037;
+		--color-foreground-hover: #3e2723;
+		--color-foreground-active: #795548;
+		--color-background: #fff9c4;
+		--color-background-hover: #fffde7;
+		--color-background-active: #fff59d;
+		--color-close: #f44336;
+		--color-close-hover: #d32f2f;
+		--color-close-active: #ffcdd2;
+		--color-minimize: #ffee58;
+		--color-minimize-hover: #fdd835;
+		--color-minimize-active: #fff9c4;
 	}
 }

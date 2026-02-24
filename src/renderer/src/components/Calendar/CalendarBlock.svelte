@@ -38,9 +38,9 @@
 </script>
 
 <div
-	class="w-full aspect-square border-2 border-darkblue rounded-xs"
+	class="w-full aspect-square border-2 border-foreground rounded-xs"
 	class:border-zinc-500={isDisabled}
-	class:bg-darkblue={isAchieved}
+	class:bg-foreground={isAchieved}
 	class:bg-zinc-500={isDisabled && isAchieved}
 	onmousemove={() => (displayTooltip = true)}
 	onmouseleave={() => (displayTooltip = false)}
@@ -52,7 +52,7 @@
 
 {#if date && displayTooltip}
 	<div
-		class="absolute flex flex-col items-center bg-white dark:bg-zinc-800 darker:bg-zinc-950 text-sm border-2 border-darkblue px-2 py-1 rounded-xs"
+		class="absolute flex flex-col items-center bg-white dark:bg-zinc-800 darker:bg-zinc-950 text-sm border-2 border-foreground px-2 py-1 rounded-xs"
 		bind:this={tooltip}
 	>
 		<p class="font-bold">

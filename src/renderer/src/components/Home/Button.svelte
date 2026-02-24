@@ -8,7 +8,7 @@
 </script>
 
 <button
-	class="bg-lightblue border-3 border-darkblue px-2 py-1 rounded-[2px] cursor-pointer break-all hover:bg-lightblue-hover active:bg-lightblue-active"
+	class="bg-background border-3 border-foreground px-2 py-1 rounded-[2px] cursor-pointer break-all hover:bg-background-hover active:bg-background-active"
 	onclick={action}
 >
 	{text}

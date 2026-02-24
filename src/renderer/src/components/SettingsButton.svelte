@@ -4,7 +4,7 @@
 
 <button
 	onclick={() => (isSettings = !isSettings)}
-	class="absolute top-2 left-12 w-9 h-9 bg-lightblue border-3 border-darkblue rounded cursor-pointer hover:bg-lightblue-hover active:bg-lightblue-active"
+	class="absolute top-2 left-12 w-9 h-9 bg-background border-3 border-foreground rounded cursor-pointer hover:bg-background-hover active:bg-background-active"
 	title="{!isSettings ? 'open' : 'close'} settings"
 >
 	{!isSettings ? '⚙️' : '🏠'}

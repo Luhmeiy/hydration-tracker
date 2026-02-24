@@ -55,7 +55,7 @@
 	<button
 		class="min-h-8 flex items-center {isText
 			? 'text-start'
-			: 'justify-end'} cursor-pointer break-all leading-4 hover:text-darkblue-hover active:text-darkblue-active"
+			: 'justify-end'} cursor-pointer break-all leading-4 hover:text-foreground-hover active:text-foreground-active"
 		onclick={() => (isEditing = true)}
 		title="edit value"
 	>

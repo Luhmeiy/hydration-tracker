@@ -14,7 +14,7 @@
 	<select
 		bind:value={unit}
 		onchange={changeUnit}
-		class="bg-lightblue border-3 border-darkblue px-2 py-1 rounded-[2px] cursor-pointer hover:bg-lightblue-hover"
+		class="bg-background border-3 border-foreground px-2 py-1 rounded-[2px] cursor-pointer hover:bg-background-hover"
 	>
 		<option value="mL">mL</option>
 		<option value="L" selected>L</option>

@@ -8,6 +8,8 @@
 	const conf = new Conf()
 
 	let selectedModes = $state<Mode[]>(DEFAULT_MODES)
+	let coreModes = $state<Mode[]>(DEFAULT_MODES.slice(0, 3))
+	let extraModes = $state<Mode[]>(DEFAULT_MODES.slice(3))
 
 	const updateSelectedModes = async (key: Mode): Promise<void> => {
 		if (selectedModes.includes(key)) {
@@ -33,14 +35,29 @@
 <section class="flex flex-col items-center gap-2">
 	<h2 class="font-bold">Themes</h2>
 
-	<div class="flex flex-col gap-1 text-sm">
-		{#each DEFAULT_MODES as mode (mode)}
-			<ToggleSwitch
-				action={() => updateSelectedModes(mode)}
-				disabled={selectedModes.includes(mode) && selectedModes.length === 1}
-				label={mode}
-				value={selectedModes.includes(mode)}
-			/>
-		{/each}
+	<div class="flex flex-col gap-3 text-sm">
+		<div class="flex flex-col gap-1">
+			<h3 class="font-bold text-center">Core</h3>
+			{#each coreModes as mode (mode)}
+				<ToggleSwitch
+					action={() => updateSelectedModes(mode)}
+					disabled={selectedModes.includes(mode) && selectedModes.length === 1}
+					label={mode}
+					value={selectedModes.includes(mode)}
+				/>
+			{/each}
+		</div>
+
+		<div class="flex flex-col gap-1">
+			<h3 class="font-bold text-center">Extra</h3>
+			{#each extraModes as mode (mode)}
+				<ToggleSwitch
+					action={() => updateSelectedModes(mode)}
+					disabled={selectedModes.includes(mode) && selectedModes.length === 1}
+					label={mode}
+					value={selectedModes.includes(mode)}
+				/>
+			{/each}
+		</div>
 	</div>
 </section>
