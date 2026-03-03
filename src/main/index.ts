@@ -140,7 +140,12 @@ class HydrationTracker {
 			this.secondaryWindow?.hide()
 		} else {
 			if (this.isCalendarOpen) {
+				this.secondaryWindow?.restore()
 				this.secondaryWindow?.show()
+			}
+
+			if (this.mainWindow?.isMinimized()) {
+				this.mainWindow.restore()
 			}
 
 			this.mainWindow?.show()
