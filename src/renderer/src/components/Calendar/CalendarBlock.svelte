@@ -40,6 +40,7 @@
 <div
 	class="w-full aspect-square border-2 border-foreground rounded-xs"
 	class:border-zinc-500={isDisabled}
+	class:opacity-40={isDisabled}
 	class:bg-foreground={isAchieved}
 	class:bg-zinc-500={isDisabled && isAchieved}
 	onmousemove={() => (displayTooltip = true)}

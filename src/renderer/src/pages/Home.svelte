@@ -45,7 +45,7 @@
 		const month = today.toLocaleDateString('en', { month: '2-digit' })
 		const day = today.getDate()
 
-		const todayKey = `${year}-${month}-${day}`
+		const todayKey = `${year}-${month}-${day.toString().padStart(2, '0')}`
 
 		const newEntry = {
 			waterGoal,
