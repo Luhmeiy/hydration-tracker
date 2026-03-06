@@ -11,7 +11,6 @@
 - [📑 About](#📑-about)
 - [🎨 Layout](#🎨-layout)
 - [✨ Features](#✨-features)
-- [🛠️ Planned Features](#🛠️-planned-features)
 - [📚 What I Learned](#📚-what-i-learned)
 - [🚀 Quick Start](#🚀-quick-start)
 
@@ -25,7 +24,7 @@ Drinking the necessary amount of water everyday is crucial for maintaining overa
 
 <div align="center">
 
-<img src="./docs/layout.png" width="300">
+<img src="./docs/layout.png" width="500">
 
 </div>
 
@@ -35,15 +34,13 @@ Check out the complete design on [Figma](https://www.figma.com/design/RyQPo0xTzM
 
 - **🎯 Customizable Goals** - Set your daily water intake target
 - **⚡ Custom Presets** - Save and use frequently consumed amounts
+- **🗓️ Calendar** - Track which days you achieved your daily intake target
 - **🔔 Reminders** - Get notified to drink water
-- **🌓 Multiple Themes** - Light, dark, and darker mode support
+- **🎨 Multiple Themes** - Support for various themes
+    - **🌓 Core Themes** - Light, dark and darker
+    - **🍓 Extra Themes** - Strawberry, grapes, green apple and sunflower
 - **🔢 Flexible Units** - Switch between mL, L, fl oz and cups
 - **🔄 Daily Reset** - Automatically resets goals every day
-
-## 🛠️ Planned Features
-
-- **🗓️ Calendar** - Track which days you achieved your daily intake target
-- **🎨 More Themes** - The more the merrier
 
 ## 📚 What I Learned
 
